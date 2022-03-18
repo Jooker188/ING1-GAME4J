@@ -8,6 +8,6 @@ public class Player{
     }
     public static void main(String args[]){
         Player p = new Player(7, "rollo");
-        System.out.println("J'ai " + p.age + " ans\n" + "Et je m'appelle " + p.nom);
+        System.out.println("J'ai " + p.age +" ans\n" + "Et je m'appelle " + p.nom);
     }
 }
