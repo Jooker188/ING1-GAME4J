@@ -9,7 +9,7 @@ public class Main {
 
         //Mecanisme de jeu
         while(p.energy > 0 && !p.isDead){
-            board.Display();
+            board.Display();    
             System.out.println("Energy left : " + p.energy);
             p.action();
             if(board.gameOver()){
@@ -17,6 +17,7 @@ public class Main {
             }
         }
         System.out.println("Game Over");
+        p.showResult();
     }
 
 }

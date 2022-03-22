@@ -34,8 +34,8 @@ public class Board {
     public void setRandomObstacle(){
         int nbrArbre = 10;
         while(nbrArbre > 0){
-            int caseX = (int) (DIM_X-2 * Math.random());
-            int caseY = (int) (DIM_Y-3 * Math.random());
+            int caseX = (int) (DIM_X * Math.random());
+            int caseY = (int) (DIM_Y * Math.random());
 
             if(this.board[caseX][caseY] == ' '){
                 this.board[caseX][caseY] = 'A'; // Mise en place des arbres
@@ -109,15 +109,35 @@ public class Board {
 		return new int[] {positionX,positionY};
 	}
 
-    public void setPlayer(int x, int y){
-        for(int i=0; i<DIM_X; i++){
-            for(int j=0; j<DIM_Y; j++){
-                if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
-                    this.board[i][j] = ' ';
+    public int setPlayer(int x, int y){
+        
+        if(this.board[x][y] == ' '){
+            for(int i=0; i<DIM_X; i++){
+                for(int j=0; j<DIM_Y; j++){
+                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
+                        this.board[i][j] = ' ';
+                    }
                 }
             }
+            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+            return 0; //la case est vide
         }
-        this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+        else if(this.board[x][y] == 'A' || this.board[x][y] == 'R'){
+            System.out.println("You hit an obstacle, you return to the previous square and lose 10 life points");
+            return 1; //la case est un obstacle
+        }
+        else{
+            for(int i=0; i<DIM_X; i++){
+                for(int j=0; j<DIM_Y; j++){
+                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
+                        this.board[i][j] = ' ';
+                    }
+                }
+            }
+            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+            return 2; //la case est a manger
+        }
+        
     }
 
     public boolean gameOver(){
@@ -126,6 +146,10 @@ public class Board {
             return true;
         }
         return false;
+    }
+
+    public void realisable(){
+        
     }
 
     public void Init(){
