@@ -33,7 +33,7 @@ public class Player{
             default:
                 break;
         }
-
+        
         this.energy--;
     }
 }

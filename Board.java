@@ -2,11 +2,14 @@ public class Board {
     private static int DIM_X;
     private static int DIM_Y;
     private char[][] board;
+    private Player p;
 
     public Board(){
         DIM_X = 20;
         DIM_Y = 40;
         this.board = new char[DIM_X][DIM_Y];
+        this.p = new Player(this);
+        System.out.println(this.p.energy);
     }
 
     public void setBoard(){
@@ -34,8 +37,8 @@ public class Board {
     public void setRandomObstacle(){
         int nbrArbre = 10;
         while(nbrArbre > 0){
-            int caseX = (int) (DIM_X-2 * Math.random());
-            int caseY = (int) (DIM_Y-3 * Math.random());
+            int caseX = (int) (DIM_X * Math.random());
+            int caseY = (int) (DIM_Y * Math.random());
 
             if(this.board[caseX][caseY] == ' '){
                 this.board[caseX][caseY] = 'A'; // Mise en place des arbres
@@ -126,7 +129,7 @@ public class Board {
             return true;
         }
         return false;
-    }
+    } 
 
     public void Init(){
         setBoard();
