@@ -1,3 +1,5 @@
+import java.io.*;
+
 public class Board {
     private static int DIM_X;
     private static int DIM_Y;
@@ -9,7 +11,6 @@ public class Board {
         DIM_Y = 40;
         this.board = new char[DIM_X][DIM_Y];
         this.p = new Player(this);
-        System.out.println(this.p.energy);
     }
 
     public void setBoard(){
@@ -112,15 +113,35 @@ public class Board {
 		return new int[] {positionX,positionY};
 	}
 
-    public void setPlayer(int x, int y){
-        for(int i=0; i<DIM_X; i++){
-            for(int j=0; j<DIM_Y; j++){
-                if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
-                    this.board[i][j] = ' ';
+    public int setPlayer(int x, int y){
+        
+        if(this.board[x][y] == ' '){
+            for(int i=0; i<DIM_X; i++){
+                for(int j=0; j<DIM_Y; j++){
+                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
+                        this.board[i][j] = ' ';
+                    }
                 }
             }
+            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+            return 0; //la case est vide
         }
-        this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+        else if(this.board[x][y] == 'A' || this.board[x][y] == 'R'){
+            System.out.println("You hit an obstacle, you return to the previous square and lose 10 life points");
+            return 1; //la case est un obstacle
+        }
+        else{
+            for(int i=0; i<DIM_X; i++){
+                for(int j=0; j<DIM_Y; j++){
+                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
+                        this.board[i][j] = ' ';
+                    }
+                }
+            }
+            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+            return 2; //la case est a manger
+        }
+        
     }
 
     public boolean gameOver(){
@@ -130,6 +151,42 @@ public class Board {
         }
         return false;
     } 
+
+    public boolean isRealisable(){
+        int range = this.p.energy;
+        while(range > 0){
+            for(int i = 0; i<range; i++){
+                int newX1 = getPlayer()[0] + i;
+                int newX2 = getPlayer()[0] - i;
+                int newY1 = getPlayer()[1] + i;
+                int newY2 = getPlayer()[1] - i;
+
+                if(this.board[newX1][getPlayer()[1]] != ('V' |'F') && 
+                   this.board[newX2][getPlayer()[1]] != ('V' |'F') &&
+                   this.board[getPlayer()[0]][newY1] != ('V' |'F') &&
+                   this.board[getPlayer()[0]][newY2] != ('V' |'F')){
+                        System.out.println("false");
+                        return false; 
+                }
+            }
+        }
+        System.out.println("true");
+        return true;
+    }
+
+    public void Save(){
+        try{
+            PrintWriter file = new PrintWriter(new FileWriter("sauvegarde.txt" ));
+            file.print("getPlayer()" + System.getProperty("line.separator" ));
+            file.flush();
+            file.close();
+        }
+        catch (java.io.IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    
 
     public void Init(){
         setBoard();
