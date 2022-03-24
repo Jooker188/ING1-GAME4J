@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Player{
     public Board board;
@@ -40,7 +42,23 @@ public class Player{
                 resultat=this.board.setPlayer(x,y+1);
                 break;
             case "l":
-                this.board.Save();
+                Data data = new Data();
+                data.posPlayerX = this.board.getPlayer()[0];
+                data.posPlayerY = this.board.getPlayer()[1];
+                data.meats = this.board.getAllMeats();
+                data.fruits = this.board.getAllFruits();
+                data.rocks = this.board.getAllRocks();
+                data.trees = this.board.getAllTrees();
+                data.energy = this.energy;
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                data.date = dtf.format(LocalDateTime.now());
+                try{
+                    Ressources.Save(data, "data.save");
+                    System.out.println("\nGame Saved Successfully !");
+                }
+                catch(Exception e){
+                    System.out.println("Couldn't save : " + e.getMessage());
+                }
                 return "L";
             default:
                 break;
@@ -63,7 +81,11 @@ public class Player{
 
 
     public void showResult(){
-        System.out.println("You have still " + this.energy + ", you win " + energyWin + " and lose " + energyLose + " energy");
+        System.out.println("\n############# PLAYER ENERGY INFORMATIONS #############");
+        System.out.println("Energy left : " + this.energy);
+        System.out.println("Energy won  : " + energyWin);
+        System.out.println("Energy used : " + energyLose);
+        System.out.println("\n############# PLAYER DISTANCE INFORMATIONS #############");
         System.out.println("You have traveled " + distanceParcourure + " boxes");
     }
  

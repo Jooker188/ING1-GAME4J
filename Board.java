@@ -1,6 +1,7 @@
 import java.io.*;
+import java.util.ArrayList; 
 
-public class Board {
+public class Board{
     private static int DIM_X;
     private static int DIM_Y;
     private char[][] board;
@@ -83,6 +84,19 @@ public class Board {
         }
     }
 
+    public void setTree(int[] tree){
+        this.board[tree[0]][tree[1]] = 'A';
+    }
+    public void setRock(int[] rock){
+        this.board[rock[0]][rock[1]] = 'R';
+    }
+    public void setFruit(int[] fruit){
+        this.board[fruit[0]][fruit[1]] = 'F';
+    }
+    public void setMeat(int[] meat){
+        this.board[meat[0]][meat[1]] = 'V';
+    }
+
     public void Display(){
         System.out.println();
 
@@ -113,6 +127,93 @@ public class Board {
 		return new int[] {positionX,positionY};
 	}
 
+    public boolean isTree(int x, int y){
+        if(this.board[x][y] == 'A'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public boolean isRock(int x, int y){
+        if(this.board[x][y] == 'R'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public boolean isMeat(int x, int y){
+        if(this.board[x][y] == 'V'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public boolean isFruit(int x, int y){
+        if(this.board[x][y] == 'F'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public ArrayList<int[]> getAllTrees(){
+        ArrayList<int[]> obstacles = new ArrayList<int[]>();
+
+        for(int i=0; i<DIM_X; i++){
+            for(int j=0; j<DIM_Y; j++){
+                if(isTree(i,j)){
+                    int[] currentObstacle = {i,j};
+                    obstacles.add(currentObstacle);
+                }
+            }
+        }
+        return obstacles;
+    }
+
+    public ArrayList<int[]> getAllRocks(){
+        ArrayList<int[]> obstacles = new ArrayList<int[]>();
+
+        for(int i=0; i<DIM_X; i++){
+            for(int j=0; j<DIM_Y; j++){
+                if(isRock(i,j)){
+                    int[] currentObstacle = {i,j};
+                    obstacles.add(currentObstacle);
+                }
+            }
+        }
+        return obstacles;
+    }
+
+    public ArrayList<int[]> getAllMeats(){
+        ArrayList<int[]> obstacles = new ArrayList<int[]>();
+
+        for(int i=0; i<DIM_X; i++){
+            for(int j=0; j<DIM_Y; j++){
+                if(isMeat(i,j)){
+                    int[] currentObstacle = {i,j};
+                    obstacles.add(currentObstacle);
+                }
+            }
+        }
+        return obstacles;
+    }
+
+    public ArrayList<int[]> getAllFruits(){
+        ArrayList<int[]> obstacles = new ArrayList<int[]>();
+
+        for(int i=0; i<DIM_X; i++){
+            for(int j=0; j<DIM_Y; j++){
+                if(isFruit(i,j)){
+                    int[] currentObstacle = {i,j};
+                    obstacles.add(currentObstacle);
+                }
+            }
+        }
+        return obstacles;
+    }
     public int setPlayer(int x, int y){
         
         if(this.board[x][y] == ' '){
@@ -127,7 +228,7 @@ public class Board {
             return 0; //la case est vide
         }
         else if(this.board[x][y] == 'A' || this.board[x][y] == 'R'){
-            System.out.println("You hit an obstacle, you return to the previous square and lose 10 life points");
+            System.out.println("You have hit an obstacle, you return to the previous position and lose 10 life points");
             return 1; //la case est un obstacle
         }
         else{
@@ -146,7 +247,7 @@ public class Board {
 
     public boolean gameOver(){
         if(getPlayer()[0] == DIM_X-2 && getPlayer()[1] == DIM_Y-3){
-            System.out.println("Vous avez atteint votre maison !");
+            System.out.println("You have reached you House !");
             return true;
         }
         return false;
@@ -173,20 +274,6 @@ public class Board {
         System.out.println("true");
         return true;
     }
-
-    public void Save(){
-        try{
-            PrintWriter file = new PrintWriter(new FileWriter("sauvegarde.txt" ));
-            file.print("getPlayer()" + System.getProperty("line.separator" ));
-            file.flush();
-            file.close();
-        }
-        catch (java.io.IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    
 
     public void Init(){
         setBoard();

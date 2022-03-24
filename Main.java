@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
     public static int Menu(){
@@ -22,22 +24,6 @@ public class Main {
         }
        return -1;
     }
-    public static void Load(){
-        BufferedReader lect;
-        try{
-            FileInputStream fichier = new FileInputStream("sauvegarde.txt" );
-            ObjectInputStream ois = new ObjectInputStream(fichier);
-            int[] load =  (int[]) ois.readObject();
-                
-            System.out.println(load);
-        }
-        catch (java.io.IOException e){
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }
-    }
     public static void main(String args[]){
 
         int start = Menu();
@@ -50,19 +36,56 @@ public class Main {
 
                 while(p.energy > 0 && !p.isDead){
                     board.Display();    
-                    System.out.println("Energy left : " + p.energy);
+                    System.out.println("\nEnergy left : " + p.energy);
                     String action = p.action();
                     if(board.gameOver() | action == "L"){
                         break;
                     }
                 }
                 p.showResult();
+                System.out.println("\nSee you soon !");
+                break;
 
             case 2:
-                Load();
-            
+                try {
+                    Data data = (Data) Ressources.Load("data.save");
+                    System.out.println("\n############# PREVIOUS GAME LOADED #############");
+                    System.out.println("\n Game from the : " + data.date);
+                    Board boardRecover = new Board();
+                    boardRecover.setBoard();
+                    Player pRecover = new Player(boardRecover);
+                    pRecover.energy = data.energy;
+                    boardRecover.setPlayer(data.posPlayerX, data.posPlayerY);
+                    for (int[] obstacle : data.trees) {
+                        boardRecover.setTree(obstacle);
+                    }
+                    for (int[] obstacle : data.rocks) {
+                        boardRecover.setRock(obstacle);
+                    }
+                    for (int[] obstacle : data.fruits) {
+                        boardRecover.setFruit(obstacle);
+                    }
+                    for (int[] obstacle : data.meats) {
+                        boardRecover.setMeat(obstacle);
+                    }
+                    while(pRecover.energy > 0 && !pRecover.isDead){
+                        boardRecover.Display();    
+                        System.out.println("\nEnergy left : " + pRecover.energy);
+                        String action = pRecover.action();
+                        if(boardRecover.gameOver() | action == "L"){
+                            break;
+                        }
+                    }
+                    pRecover.showResult();
+                    System.out.println("\nSee you soon !");
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Couldn't save : " + e.getMessage());
+                }
+                break;
+
             case 3:
-            System.out.println("\nSee you soon !");
+                System.out.println("\nSee you soon !");
                 break;
             
             default:
