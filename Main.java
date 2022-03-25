@@ -1,14 +1,13 @@
 import java.util.Scanner;
-import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.io.File;
 
 public class Main {
     public static int Menu(){
         System.out.println("\n################# WELCOME TO GAME4J #################\n");
         System.out.println("1 - Generate a new game");
         System.out.println("2 - Load a previous game");
-        System.out.println("3 - Exit\n");
+        System.out.println("3 - See games history");
+        System.out.println("4 - Exit\n");
         Scanner keyboard = new Scanner(System.in);
         int action = keyboard.nextInt();
 
@@ -19,11 +18,62 @@ public class Main {
                 return 2;
             case 3:
                 return 3;
+            case 4:
+                return 4;
             default:
                 break;
         }
        return -1;
     }
+
+    public static boolean hasGames(){
+        File file = new File("./games/");
+        switch(file.list().length){
+            case 0:
+                return false;
+        }
+        return true;
+    }
+
+    public static void startReplay(int gameID, int speed){
+        try {
+            Data data = (Data) Ressources.Load("./games/game"+gameID+".save");
+            Board board = new Board();
+            board.setBoard();
+            Player p = new Player(board);
+            for (int[] obstacle : data.trees) {
+                board.setTree(obstacle);
+            }
+            for (int[] obstacle : data.rocks) {
+                board.setRock(obstacle);
+            }
+            for (int[] obstacle : data.fruits) {
+                board.setFruit(obstacle);
+            }
+            for (int[] obstacle : data.meats) {
+                board.setMeat(obstacle);
+            }
+            board.Display();
+            for (int[] deplacement : data.playerDeplacements) {
+                board.setPlayer(deplacement[0], deplacement[1]);
+                board.Display();
+                switch(speed){
+                    case 1:
+                        Thread.sleep(1500);
+                        break;
+                    case 2:
+                        Thread.sleep(1000);
+                        break;
+                    case 3:
+                        Thread.sleep(500);
+                        break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Couldn't load : " + e.getMessage());
+        }
+    }
+
     public static void main(String args[]){
 
         int start = Menu();
@@ -38,7 +88,11 @@ public class Main {
                     board.Display();    
                     System.out.println("\nEnergy left : " + p.energy);
                     String action = p.action();
-                    if(board.gameOver() | action == "L"){
+                    if(action == "L"){
+                        break;
+                    }
+                    if(board.gameOver()){
+                        p.addToHistory();
                         break;
                     }
                 }
@@ -72,7 +126,11 @@ public class Main {
                         boardRecover.Display();    
                         System.out.println("\nEnergy left : " + pRecover.energy);
                         String action = pRecover.action();
-                        if(boardRecover.gameOver() | action == "L"){
+                        if(action == "L"){
+                            break;
+                        }
+                        if(boardRecover.gameOver()){
+                            pRecover.addToHistory();
                             break;
                         }
                     }
@@ -80,11 +138,37 @@ public class Main {
                     System.out.println("\nSee you soon !");
                     break;
                 } catch (Exception e) {
-                    System.out.println("Couldn't save : " + e.getMessage());
+                    System.out.println("No game saved yet");
                 }
                 break;
-
+            
             case 3:
+                if(hasGames()){
+                    File file = new File("./games/");
+                    System.out.println("\n############# GAMES HISTORY #############");
+                    System.out.println("\nSelect one :");
+                    for(int i=0; i<file.list().length; i++){
+                        try {
+                            Data data = (Data) Ressources.Load("./games/game"+i+".save");
+                            System.out.println(i + " - Game from " + data.date);
+                        } catch (Exception e) {
+                            System.out.println("Couldn't load : " + e.getMessage());
+                        }
+                    }
+                    Scanner keyboard = new Scanner(System.in);
+                    int action = keyboard.nextInt();
+                    System.out.println("\nSelect Replay Speed :");
+                    System.out.println("\n1 - Slow");
+                    System.out.println("2 - Normal");
+                    System.out.println("3 - Fast\n");
+                    int actionSpeed = keyboard.nextInt();
+                    
+                    startReplay(action,actionSpeed);
+                }
+                else{
+                    System.out.println("\nThere is no game to watch yet !");
+                }
+            case 4:
                 System.out.println("\nSee you soon !");
                 break;
             

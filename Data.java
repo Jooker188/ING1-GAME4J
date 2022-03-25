@@ -10,6 +10,7 @@ public class Data implements java.io.Serializable{
     public ArrayList<int[]> fruits;
     public ArrayList<int[]> rocks;
     public ArrayList<int[]> meats;
+    public ArrayList<int[]> playerDeplacements;
     public int energy;
     public String date;
 }

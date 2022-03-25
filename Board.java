@@ -1,4 +1,3 @@
-import java.io.*;
 import java.util.ArrayList; 
 
 public class Board{
@@ -8,8 +7,8 @@ public class Board{
     private Player p;
 
     public Board(){
-        DIM_X = 20;
-        DIM_Y = 40;
+        DIM_X = 10;
+        DIM_Y = 30;
         this.board = new char[DIM_X][DIM_Y];
         this.p = new Player(this);
     }
@@ -33,6 +32,15 @@ public class Board{
                     this.board[i][j] = ' ';  // Mise en place case vide
                 }
             }
+        }
+    }
+
+    public boolean isBorder(int x, int y){
+        if(this.board[x][y] == '#'){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 
@@ -247,7 +255,8 @@ public class Board{
 
     public boolean gameOver(){
         if(getPlayer()[0] == DIM_X-2 && getPlayer()[1] == DIM_Y-3){
-            System.out.println("You have reached you House !");
+            System.out.println("You have reached your House !");
+
             return true;
         }
         return false;
