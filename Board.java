@@ -5,6 +5,11 @@ public class Board{
     private static int DIM_Y;
     private char[][] board;
     private Player p;
+    public ArrayList<int[]> allMeats;
+    public ArrayList<int[]> allFruits;
+    public ArrayList<int[]> allRocks;
+    public ArrayList<int[]> allTrees;
+
 
     public Board(){
         DIM_X = 10;
@@ -135,6 +140,8 @@ public class Board{
 		return new int[] {positionX,positionY};
 	}
 
+    
+
     public boolean isTree(int x, int y){
         if(this.board[x][y] == 'A'){
             return true;
@@ -178,6 +185,7 @@ public class Board{
                 }
             }
         }
+        this.allTrees = obstacles;
         return obstacles;
     }
 
@@ -192,6 +200,7 @@ public class Board{
                 }
             }
         }
+        this.allRocks = obstacles;
         return obstacles;
     }
 
@@ -206,6 +215,7 @@ public class Board{
                 }
             }
         }
+        this.allMeats = obstacles;
         return obstacles;
     }
 
@@ -220,6 +230,7 @@ public class Board{
                 }
             }
         }
+        this.allFruits = obstacles;
         return obstacles;
     }
     public int setPlayer(int x, int y){
@@ -288,5 +299,9 @@ public class Board{
         setBoard();
         setRandomObstacle();
         setRandomBonus();
+        getAllFruits();
+        getAllMeats();
+        getAllRocks();
+        getAllTrees();
     }
 }
