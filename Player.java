@@ -30,8 +30,7 @@ public class Player{
         this.energy = (int) ((Math.random() * (15 - 10)) + 10);  // int) ((Math.random() * (max - min)) + min);
     }
 
-    public Player(char[][] board2) {
-    }
+  
 
     
     public String action(){
