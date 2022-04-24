@@ -56,10 +56,6 @@ public class MyWindow extends JFrame {
         String urlPlayer = "C:\\Users\\joudy\\Documents\\EISTI\\S2\\Java\\Projet\\ING1-GAME4J\\src\\casePlayer.png";
         iconPlayer = new ImageIcon(new ImageIcon(urlPlayer).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
         
-        
-
-            
-        
     }
 
     public void displayBoard(){
@@ -93,14 +89,22 @@ public class MyWindow extends JFrame {
                     labelCase[i][j] = new JLabel(iconPlayer, JLabel.CENTER);
                 }
                 else{
-                    labelCase[i][j] = new JLabel(iconCase, JLabel.CENTER);
+                    labelCase[i][j] = new JLabel("", JLabel.CENTER);
                 }
-                
+                // labelCase[i][j].setBackground(color.RED);
                 labelCase[i][j].setBorder(BorderFactory.createLineBorder(Color.black, 1, true));
+                gameBoard.setBackground(new Color(45,137,33));
                 gameBoard.add(labelCase[i][j]);
                   
             }
         } 
+    }
+
+    public void refreshBoard(int x, int y){
+        int[] playerPosition = this.p.board.getPlayer();
+        labelCase[playerPosition[0]][playerPosition[1]].setIcon(iconPlayer);
+        labelCase[x][y].setIcon(null);
+        
     }
 /*
     //--------------------Related to Icons----------------------------//
@@ -142,13 +146,17 @@ public class MyWindow extends JFrame {
         board.Init();
         Player player = new Player(board);
 
+        
+
         // Start my window
         MyWindow myWindow = new MyWindow(player);
         myWindow.displayBoard();
         myWindow.setVisible( true );
-
-    
-
+        int x = board.getPlayer()[0];
+        int y = board.getPlayer()[1];
+        Thread.sleep(3000);
+        player.moveDown(x, y);
+        myWindow.refreshBoard(x, y);
     }
 
 }
