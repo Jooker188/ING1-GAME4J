@@ -1,8 +1,8 @@
 import java.util.ArrayList; 
 
 public class Board{
-    private static int DIM_X;
-    private static int DIM_Y;
+    public static int DIM_X;
+    public static int DIM_Y;
     private char[][] board;
     private Player p;
     public ArrayList<int[]> allMeats;
@@ -12,8 +12,8 @@ public class Board{
 
 
     public Board(){
-        DIM_X = 10;
-        DIM_Y = 30;
+        DIM_X = 13;
+        DIM_Y = 13;
         this.board = new char[DIM_X][DIM_Y];
         this.p = new Player(this);
     }
@@ -21,13 +21,14 @@ public class Board{
     public void setBoard(){
         for(int i=0; i<DIM_X; i++){
             for(int j=0; j<DIM_Y; j++){
-                if (i == 0 || i == DIM_X-1){  //Mise en place des murs horizontaux
-                    this.board[i][j] = '#';
-                }
-                else if(j == 0 || j == DIM_Y-1){ //Mise en place des murs verticaux
-                    this.board[i][j] = '#';
-                }
-                else if( i == 1 && j == 2){ //Positionnement du Joueur en debut de partie
+                // if (i == 0 || i == DIM_X-1){  //Mise en place des murs horizontaux
+                //     this.board[i][j] = '#';
+                // }
+                // else if(j == 0 || j == DIM_Y-1){ //Mise en place des murs verticaux
+                //     this.board[i][j] = '#';
+                // }
+                // else 
+                if( i == 0 && j == 0){ //Positionnement du Joueur en debut de partie
                     this.board[i][j] = 'P';
                 }
                 else if( i == DIM_X-2 && j == DIM_Y-3){ //Positionnement de la maison a atteindre
