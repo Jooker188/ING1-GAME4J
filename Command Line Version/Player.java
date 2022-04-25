@@ -40,23 +40,23 @@ public class Player{
 
         int x = this.board.getPlayer()[0];
         int y = this.board.getPlayer()[1];
-        int resultat = 0;
         
 
         switch(action){ //deplacement avec ZQSD pour le moment
             case "z":
-                resultat = moveUp(x,y);
+                moveUp(x,y);
+                
                 
                 break;
             case "q":
-                resultat = moveLeft(x,y);
+                moveLeft(x,y);
                 
                 break;
             case "s":
-                resultat = moveDown(x,y);
+                moveDown(x,y);
                 break;
             case "d":
-                resultat = moveRight(x, y);
+                moveRight(x, y);
                 break;
             case "l":
                 Data data = new Data();
@@ -100,25 +100,12 @@ public class Player{
             default:
                 break;
         }
-
-
-        this.energy--;
-        if(resultat == 1){
-            this.energy -= 10;
-            energyLose += 10;
-        }
-        else if(resultat == 2){
-            this.energy += 10;
-            energyWin += 10;
-            distanceParcourure += 1;
-        }
-        else{
-            distanceParcourure += 1;
-        }
         return "a";
     }
 
-    public int moveUp(int x, int y){
+    
+
+    public void moveUp(int x, int y){
         int resultat = 0;
         if(!this.board.isBorder(x-1,y)){
             resultat=this.board.setPlayer(x-1,y);
@@ -128,10 +115,10 @@ public class Player{
         else{
             System.out.println("\nThis is a Wall");
         }
-        return resultat;
+        refreshData(resultat);
     }
 
-    public int moveLeft(int x, int y){
+    public void moveLeft(int x, int y){
         int resultat = 0;
         if(!this.board.isBorder(x,y-1)){
             int[] currentBox = {x,y-1};
@@ -142,10 +129,10 @@ public class Player{
         else{
             System.out.println("\nThis is a Wall");
         }
-        return resultat;
+        refreshData(resultat);
     }
 
-    public int moveDown(int x, int y){
+    public void moveDown(int x, int y){
         int resultat = 0;
         if(!this.board.isBorder(x+1,y)){
             int[] currentBox = {x+1,y};
@@ -155,10 +142,10 @@ public class Player{
         else{
             System.out.println("\nThis is a Wall");
         }
-        return resultat;
+        refreshData(resultat);
     }
 
-    public int moveRight(int x, int y){
+    public void moveRight(int x, int y){
         int resultat = 0;
         if(!this.board.isBorder(x,y+1)){
             int[] currentBox = {x,y+1};
@@ -168,7 +155,23 @@ public class Player{
         else{
             System.out.println("\nThis is a Wall");
         }
-        return resultat;
+        refreshData(resultat);
+    }
+
+    public void refreshData(int resultat){
+        this.energy--;
+        if(resultat == 1){
+            this.energy -= 9;
+            energyLose += 10;
+        }
+        else if(resultat == 2){
+            this.energy += 10;
+            energyWin += 10;
+            distanceParcourure += 1;
+        }
+        else{
+            distanceParcourure += 1;
+        }
     }
 
     public void boucle(int[] currentBox){

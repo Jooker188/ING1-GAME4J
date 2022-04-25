@@ -31,9 +31,9 @@ public class Board{
                 if( i == 0 && j == 0){ //Positionnement du Joueur en debut de partie
                     this.board[i][j] = 'P';
                 }
-                else if( i == DIM_X-2 && j == DIM_Y-3){ //Positionnement de la maison a atteindre
-                    this.board[i][j] = 'M';
-                }
+                // else if( i == DIM_X-2 && j == DIM_Y-3){ //Positionnement de la maison a atteindre
+                //     this.board[i][j] = 'M';
+                // }
                 else{
                     this.board[i][j] = ' ';  // Mise en place case vide
                 }
@@ -175,6 +175,14 @@ public class Board{
             return false;
         }
     }
+    public boolean isPlayer(int x, int y){
+        if(this.board[x][y] == 'P'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public ArrayList<int[]> getAllTrees(){
         ArrayList<int[]> obstacles = new ArrayList<int[]>();
 
@@ -266,7 +274,7 @@ public class Board{
     }
 
     public boolean gameOver(){
-        if(getPlayer()[0] == DIM_X-2 && getPlayer()[1] == DIM_Y-3){
+        if(getPlayer()[0] == DIM_X-1 && getPlayer()[1] == DIM_Y-1){
             System.out.println("You have reached your House !");
 
             return true;
