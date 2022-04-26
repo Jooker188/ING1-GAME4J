@@ -23,7 +23,7 @@ public class Player{
         this.startTime = System.currentTimeMillis();
         this.pathUsed1 = new ArrayList<int[]>();
         this.pathUsed2 = new ArrayList<int[]>();
-        int[] startPos = {1,2};
+        int[] startPos = {0,0};
         this.pathUsed1.add(startPos);
         this.pathUsed2.add(startPos);
         this.undo = 6;
@@ -79,23 +79,7 @@ public class Player{
                 return "L";
 
             case "b":
-                if(this.undo > 0){
-                    if(this.pathUsed1.size()>1){
-                        this.pathUsed1.remove(this.pathUsed1.size()-1);
-                        this.board.setPlayer(this.pathUsed1.get(this.pathUsed1.size()-1)[0],this.pathUsed1.get(this.pathUsed1.size()-1)[1]);
-                        this.undo--;
-                        int[] currentBox = {this.pathUsed1.get(this.pathUsed1.size()-1)[0],this.pathUsed1.get(this.pathUsed1.size()-1)[1]};
-                        boucle();
-                        this.pathUsed2.add(currentBox);
-                        
-                    }
-                    else{
-                        System.out.println("This is the initial position");
-                    }
-                }
-                else{
-                    System.out.println("You can't undo your deplacement anymore");
-                }
+                undoMovement();
                 break;
             default:
                 break;
@@ -103,59 +87,98 @@ public class Player{
         return "a";
     }
 
-    
+    public void undoMovement(){
+        if(this.undo > 0){
+            if(this.pathUsed1.size()>1){
+                this.pathUsed1.remove(this.pathUsed1.size()-1);
+                this.board.setPlayer(this.pathUsed1.get(this.pathUsed1.size()-1)[0],this.pathUsed1.get(this.pathUsed1.size()-1)[1]);
+                this.undo--;
+                int[] currentBox = {this.pathUsed1.get(this.pathUsed1.size()-1)[0],this.pathUsed1.get(this.pathUsed1.size()-1)[1]};
+                // boucle(currentBox);
+                this.pathUsed2.add(currentBox);
+                
+            }
+            else{
+                System.out.println("This is the initial position");
+            }
+        }
+        else{
+            System.out.println("You can't undo your deplacement anymore");
+        }
+    }
 
-    public void moveUp(int x, int y){
+    public int[] moveUp(int x, int y){
         int resultat = 0;
+        int[] currentBox = {0,0};
         if(!this.board.isBorder(x-1,y)){
             resultat=this.board.setPlayer(x-1,y);
-            int[] currentBox = {x-1,y};
-            boucle(currentBox);          
+            currentBox[0] = x-1;
+            currentBox[1] = y;
+            if (resultat != 1){
+                // boucle(currentBox); 
+            }         
         }
         else{
             System.out.println("\nThis is a Wall");
         }
         refreshData(resultat);
+        return currentBox;
     }
 
-    public void moveLeft(int x, int y){
+    public int[] moveLeft(int x, int y){
         int resultat = 0;
+        int[] currentBox = {0,0};
         if(!this.board.isBorder(x,y-1)){
-            int[] currentBox = {x,y-1};
+            currentBox[0] = x;
+            currentBox[1] = y-1;
             resultat=this.board.setPlayer(x,y-1);
-            boucle(currentBox);
+            if (resultat != 1){
+                // boucle(currentBox); 
+            }
     
         }
         else{
             System.out.println("\nThis is a Wall");
         }
         refreshData(resultat);
+        return currentBox;
     }
 
-    public void moveDown(int x, int y){
+    public int[] moveDown(int x, int y){
         int resultat = 0;
+        int[] currentBox = {0,0};
         if(!this.board.isBorder(x+1,y)){
-            int[] currentBox = {x+1,y};
+            currentBox[0] = x+1;
+            currentBox[1] = y;
             resultat=this.board.setPlayer(x+1,y);
-            boucle(currentBox);
+            if (resultat != 1){
+                // boucle(currentBox); 
+            }        
         }
         else{
             System.out.println("\nThis is a Wall");
         }
         refreshData(resultat);
+        return currentBox;
     }
 
-    public void moveRight(int x, int y){
+    public int[] moveRight(int x, int y){
         int resultat = 0;
+        int[] currentBox = {0,0};
         if(!this.board.isBorder(x,y+1)){
-            int[] currentBox = {x,y+1};
+            currentBox[0] = x;
+            currentBox[1] = y+1;
             resultat=this.board.setPlayer(x,y+1);
-            boucle(currentBox);
+            if (resultat != 1){
+            //    boucle(currentBox); 
+            }
+            
         }
         else{
             System.out.println("\nThis is a Wall");
         }
         refreshData(resultat);
+        return currentBox;
     }
 
     public void refreshData(int resultat){
@@ -174,20 +197,19 @@ public class Player{
         }
     }
 
-    public void boucle(int[] currentBox){
-        boucle();
-        this.pathUsed1.add(currentBox);
-        this.pathUsed2.add(currentBox);
-    }
-
-    public void boucle(){
+    public ArrayList<int[]> boucle(int[] currentBox){
         ArrayList<int[]> tmp = new ArrayList<>();
-        for(int i = 0; i<this.pathUsed2.size();i++){
+        ArrayList<int[]> caseBoucle = new ArrayList<>();
+        int i ;
+        for(i = 0; i<this.pathUsed2.size();i++){
             if(this.pathUsed2.get(i)[0] == this.board.getPlayer()[0] &&
                this.pathUsed2.get(i)[1] == this.board.getPlayer()[1]){
+                   
                     System.out.println("Already traveled, here is the boucle since then :");
                     for(int j=tmp.size(); j<this.pathUsed2.size(); j++){
                         System.out.println("---->" + Arrays.toString(this.pathUsed2.get(j)));
+                        caseBoucle.add(this.pathUsed2.get(j));
+                        // System.out.println(caseBoucle.size());
                     }
             }
             else{
@@ -195,6 +217,11 @@ public class Player{
             }
            
         }
+        
+        this.pathUsed1.add(currentBox);
+        this.pathUsed2.add(currentBox);
+        return caseBoucle;
+
     }
 
     public void addToHistory(){

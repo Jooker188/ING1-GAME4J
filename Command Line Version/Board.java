@@ -282,27 +282,27 @@ public class Board{
         return false;
     } 
 
-    public boolean isRealisable(){
-        int range = this.p.energy;
-        while(range > 0){
-            for(int i = 0; i<range; i++){
-                int newX1 = getPlayer()[0] + i;
-                int newX2 = getPlayer()[0] - i;
-                int newY1 = getPlayer()[1] + i;
-                int newY2 = getPlayer()[1] - i;
+    // public boolean isRealisable(){
+    //     int range = this.p.energy;
+    //     while(range > 0){
+    //         for(int i = 0; i<range; i++){
+    //             int newX1 = getPlayer()[0] + i;
+    //             int newX2 = getPlayer()[0] - i;
+    //             int newY1 = getPlayer()[1] + i;
+    //             int newY2 = getPlayer()[1] - i;
 
-                if(this.board[newX1][getPlayer()[1]] != ('V' |'F') && 
-                   this.board[newX2][getPlayer()[1]] != ('V' |'F') &&
-                   this.board[getPlayer()[0]][newY1] != ('V' |'F') &&
-                   this.board[getPlayer()[0]][newY2] != ('V' |'F')){
-                        System.out.println("false");
-                        return false; 
-                }
-            }
-        }
-        System.out.println("true");
-        return true;
-    }
+    //             if(this.board[newX1][getPlayer()[1]] != ('V' |'F') && 
+    //                this.board[newX2][getPlayer()[1]] != ('V' |'F') &&
+    //                this.board[getPlayer()[0]][newY1] != ('V' |'F') &&
+    //                this.board[getPlayer()[0]][newY2] != ('V' |'F')){
+    //                     System.out.println("false");
+    //                     return false; 
+    //             }
+    //         }
+    //     }
+    //     System.out.println("true");
+    //     return true;
+    // }
 
     public void Init(){
         setBoard();

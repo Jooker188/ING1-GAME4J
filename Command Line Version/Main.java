@@ -83,7 +83,6 @@ public class Main {
                 Board board = new Board();
                 board.Init();
                 Player p = new Player(board);
-                board.isRealisable();
                 while(p.energy > 0 && !p.isDead){
                     board.Display();    
                     System.out.println("\nEnergy left : " + p.energy);
