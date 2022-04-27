@@ -1,28 +1,14 @@
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.Console.*;
 import java.util.ArrayList;
 import java.awt.event.KeyEvent;
-import java.awt.event.InputEvent.*;
+import java.awt.event.KeyListener;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
-// import javafx.event.ActionEvent;
-import javafx.scene.image.Image.*;
-import javafx.scene.input.KeyEvent.*;
-import javafx.scene.paint.Color.*;
-import javafx.scene.text.Font.*;
-import javafx.scene.paint.Color.*;
-import javafx.stage.WindowEvent.*;
 
 public class MyWindow extends JFrame {
 
@@ -32,7 +18,7 @@ public class MyWindow extends JFrame {
     private JLabel[][] labelCase;
     private JLabel energy, distance, energyWin, energyLose, rollback, timePlayed;
     private Player p;
-    private ImageIcon iconHomePlayer, iconJoud, iconRemy, iconCase, iconRock, iconTree, iconFruit, iconMeat, iconHome, iconPlayer, iconEnergy, iconDistance, iconEnergyLose, iconEnergyWin, iconRollback;
+    private ImageIcon iconUp, iconDown, iconLeft, iconRight, iconHomePlayer, iconJoud, iconRemy, iconCase, iconRock, iconTree, iconFruit, iconMeat, iconHome, iconPlayer, iconEnergy, iconDistance, iconEnergyLose, iconEnergyWin, iconRollback;
 
     private Timer timer, timerReplay;
 
@@ -51,7 +37,7 @@ public class MyWindow extends JFrame {
         this.setJMenuBar(this.menuBar());
 
         this.p = p;
-        labelCase = new JLabel [p.board.DIM_X][p.board.DIM_Y];
+        labelCase = new JLabel [Board.DIM_X][Board.DIM_Y];
 
         this.loadIcons();
 
@@ -60,14 +46,31 @@ public class MyWindow extends JFrame {
         contentPane.add(this.displayBoard());
         contentPane.add(this.buttonMove(), BorderLayout.SOUTH);
         contentPane.add(this.energyPanel(), BorderLayout.EAST);
-        
-    }
+
+    }	
 
     private void loadIcons(){
         // String urlCase = "C:\\Users\\joudy\\Documents\\EISTI\\S2\\Java\\Projet\\ING1-GAME4J\\src\\caseVert.png";
         // String urlCase = "src/caseVert.png";
         // ImageIcon iconCase = new ImageIcon(urlCase);
         // iconCase = new ImageIcon(new ImageIcon(urlCase).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+
+
+        String urlUp = "src/top.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconUp = new ImageIcon(new ImageIcon(urlUp).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+
+        String urlDown = "src/down.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconDown = new ImageIcon(new ImageIcon(urlDown).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        
+        String urlLeft = "src/left.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconLeft = new ImageIcon(new ImageIcon(urlLeft).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        
+        String urlRight = "src/right.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconRight = new ImageIcon(new ImageIcon(urlRight).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlHomePlayer = "src/caseHomePlayer.png";
         // ImageIcon iconJoud = new ImageIcon(urlJoud);
@@ -79,7 +82,7 @@ public class MyWindow extends JFrame {
 
         String urlRemy = "src/remy.png";
         // ImageIcon iconRemy = new ImageIcon(urlRemy);
-        iconRemy = new ImageIcon(new ImageIcon(urlRemy).getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
+        iconRemy = new ImageIcon(new ImageIcon(urlRemy).getImage().getScaledInstance(400, 300, Image.SCALE_DEFAULT));
 
         String urlRock = "src/caseRock.png";
         // ImageIcon iconRock = new ImageIcon(urlRock);
@@ -125,28 +128,28 @@ public class MyWindow extends JFrame {
         // JPanel gameBoard = (JPanel) this.getContentPane();
 
         JPanel gameBoard = new JPanel();
-        gameBoard.setLayout(new GridLayout(p.board.DIM_X,p.board.DIM_Y));
+        gameBoard.setLayout(new GridLayout(Board.DIM_X,Board.DIM_Y));
 
-        int[] playerPosition = this.p.board.getPlayer();
+        // int[] playerPosition = this.p.board.getPlayer();
 
-        for(int i = 0; i<p.board.DIM_X; i++){
-            for(int j = 0; j<p.board.DIM_Y; j++){
-                if(i == p.board.DIM_X-1 && j == p.board.DIM_Y-1){
+        for(int i = 0; i<Board.DIM_X; i++){
+            for(int j = 0; j<Board.DIM_Y; j++){
+                if(i == Board.DIM_X-1 && j == Board.DIM_Y-1){
                     labelCase[i][j] = new JLabel(iconHome, JLabel.CENTER);
                 }
-                else if(p.board.isPlayer(i, j)){
+                else if(p.getBoard().isPlayer(i, j)){
                     labelCase[i][j] = new JLabel(iconPlayer, JLabel.CENTER);
                 }
-                else if(p.board.isRock(i, j)){
+                else if(p.getBoard().isRock(i, j)){
                     labelCase[i][j] = new JLabel(iconRock, JLabel.CENTER);
                 }
-                else if(p.board.isTree(i, j)){
+                else if(p.getBoard().isTree(i, j)){
                     labelCase[i][j] = new JLabel(iconTree, JLabel.CENTER);
                 }
-                else if(p.board.isMeat(i, j)){
+                else if(p.getBoard().isMeat(i, j)){
                     labelCase[i][j] = new JLabel(iconMeat, JLabel.CENTER);
                 }
-                else if(p.board.isFruit(i, j)){
+                else if(p.getBoard().isFruit(i, j)){
                     labelCase[i][j] = new JLabel(iconFruit, JLabel.CENTER);
                 }
                 else{
@@ -189,7 +192,7 @@ public class MyWindow extends JFrame {
         }
         
         @Override public void actionPerformed( ActionEvent e ) {
-            restartGame(new Player(new Board()));
+            restartGame();
         }
     };
 
@@ -269,25 +272,89 @@ public class MyWindow extends JFrame {
         this.dispose();
     }
 
+
     private JPanel buttonMove(){
 
         JPanel buttonMove = new JPanel(new FlowLayout());
         JPanel buttonPosition = new JPanel(new BorderLayout());
         JPanel buttonTopPosition = new JPanel(new BorderLayout());
 
-
         buttonMove.add(buttonPosition, BorderLayout.CENTER);
         buttonPosition.add(buttonTopPosition, BorderLayout.NORTH);
 
         JButton undo = new JButton("UNDO");
         undo.setPreferredSize(new Dimension(70,40));
+        undo.setFont(new Font("Calibri", Font.BOLD, 15));
         buttonTopPosition.add(undo, BorderLayout.EAST);
      
         undo.addActionListener(e ->
         {
-            int intUndo;
-            int x = p.board.getPlayer()[0];
-            int y = p.board.getPlayer()[1];
+            undoListener();
+        });
+
+        JButton save = new JButton("SAVE");
+        save.setPreferredSize(new Dimension(70,40));
+        save.setFont(new Font("Calibri", Font.BOLD, 15));
+        buttonTopPosition.add(save, BorderLayout.WEST);
+     
+        save.addActionListener(e ->
+        {
+            saveListener();
+        });
+
+        JButton up = new JButton(iconUp);
+        up.setPreferredSize(new Dimension(70,40));
+        buttonTopPosition.add(up, BorderLayout.CENTER);
+
+        up.addActionListener(e ->
+        {
+           upListener();
+        });
+
+        JButton down = new JButton(iconDown);
+        down.setPreferredSize(new Dimension(70,40));
+        buttonPosition.add(down, BorderLayout.CENTER);
+
+        down.addActionListener(e ->
+        {
+            downListener();
+        });
+
+        JButton left = new JButton(iconLeft);
+        left.setPreferredSize(new Dimension(70,40));
+        buttonPosition.add(left, BorderLayout.WEST);
+
+        left.addActionListener(e ->
+        {
+            leftListener();
+        });
+
+        JButton right = new JButton(iconRight);
+        right.setPreferredSize(new Dimension(70,40));
+        buttonPosition.add(right, BorderLayout.EAST);
+        
+        right.addActionListener(e ->
+        {
+            rightListener();
+        });
+       
+        return buttonMove;
+    }
+
+    private void saveListener(){
+        int work = p.saveGame();
+            if(work == 1){
+                saveDialog("Game Saved Successfully !");
+            }
+            else{
+                displayMessageDialog("The game can not be saved");
+            }
+    }
+
+    private void undoListener(){
+        int intUndo;
+            int x = p.getBoard().getPlayer()[0];
+            int y = p.getBoard().getPlayer()[1];
             intUndo = p.undoMovement();
             if(intUndo == 1){
                 displayMessageDialog("You can't undo your deplacement anymore ");
@@ -296,98 +363,51 @@ public class MyWindow extends JFrame {
                 displayMessageDialog("This is the initial position, you can't undo your deplacement ");
             }
             refreshBoard(x, y);
-        });
-
-        
-        JButton save = new JButton("SAVE");
-        save.setPreferredSize(new Dimension(70,40));
-        buttonTopPosition.add(save, BorderLayout.WEST);
-     
-        save.addActionListener(e ->
-        {
-            int work = p.saveGame();
-            if(work == 1){
-                saveDialog("Game Saved Successfully !");
-            }
-            else{
-                displayMessageDialog("The game can not be saved");
-            }
-        });
-
-
-        JButton up = new JButton("UP");
-        up.setPreferredSize(new Dimension(70,40));
-        buttonTopPosition.add(up, BorderLayout.CENTER);
-
-        up.addActionListener(e ->
-        {
-            if(boucleIsFinish == true){
-                int[] currentBox ;
-                int x = p.board.getPlayer()[0];
-                int y = p.board.getPlayer()[1];
-                currentBox = p.moveUp(x, y);
-                caseBoucle(p.boucle(currentBox));
-                refreshBoard(x, y);
-            }
-        });
-
-        JButton down = new JButton("DOWN");
-        down.setPreferredSize(new Dimension(70,40));
-        buttonPosition.add(down, BorderLayout.CENTER);
-
-        down.addActionListener(e ->
-        {
-            if(boucleIsFinish == true){
-                int[] currentBox ;
-                int x = p.board.getPlayer()[0];
-                int y = p.board.getPlayer()[1];
-                currentBox = p.moveDown(x, y);
-                caseBoucle(p.boucle(currentBox));
-                refreshBoard(x, y);
-            }
-        });
-
-        JButton left = new JButton("LEFT");
-        left.setPreferredSize(new Dimension(70,40));
-        buttonPosition.add(left, BorderLayout.WEST);
-
-        left.addActionListener(e ->
-        {
-            if(boucleIsFinish == true){
-                int[] currentBox ;
-                int x = p.board.getPlayer()[0];
-                int y = p.board.getPlayer()[1];
-                currentBox = p.moveLeft(x, y);
-                caseBoucle(p.boucle(currentBox));
-                refreshBoard(x, y);
-            }
-        });
-
-        JButton right = new JButton("RIGHT");
-        right.setPreferredSize(new Dimension(70,40));
-        buttonPosition.add(right, BorderLayout.EAST);
-        
-        right.addActionListener(e ->
-        {
-            if(boucleIsFinish == true){
-
-                int[] currentBox ;
-                int x = p.board.getPlayer()[0];
-                int y = p.board.getPlayer()[1];
-                currentBox = p.moveRight(x, y);
-                caseBoucle(p.boucle(currentBox));
-                // if(p.boucle().size()>1){
-                //     caseBoucle(p.boucle());
-                // }
-                refreshBoard(x, y);
-            }   
-        });
-       
-        
-
-        return buttonMove;
     }
 
+    private void upListener(){
+        if(boucleIsFinish == true){
+            int[] currentBox ;
+            int x = p.getBoard().getPlayer()[0];
+            int y = p.getBoard().getPlayer()[1];
+            currentBox = p.moveUp(x, y);
+            caseBoucle(p.boucle(currentBox));
+            refreshBoard(x, y);
+        }
+    }
+
+    private void downListener(){
+        if(boucleIsFinish == true){
+            int[] currentBox ;
+            int x = p.getBoard().getPlayer()[0];
+            int y = p.getBoard().getPlayer()[1];
+            currentBox = p.moveDown(x, y);
+            caseBoucle(p.boucle(currentBox));
+            refreshBoard(x, y);
+        }
+    }
+
+    private void rightListener(){
+        if(boucleIsFinish == true){
+            int[] currentBox ;
+            int x = p.getBoard().getPlayer()[0];
+            int y = p.getBoard().getPlayer()[1];
+            currentBox = p.moveRight(x, y);
+            caseBoucle(p.boucle(currentBox));
+            refreshBoard(x, y);
+        }
+    }
+
+    private void leftListener(){
+        if(boucleIsFinish == true){
+            int[] currentBox ;
+            int x = p.getBoard().getPlayer()[0];
+            int y = p.getBoard().getPlayer()[1];
+            currentBox = p.moveLeft(x, y);
+            caseBoucle(p.boucle(currentBox));
+            refreshBoard(x, y);
+        }
+    }
     private JPanel energyPanel(){
         JPanel energyPanel = new JPanel(new GridLayout(5,2));
         energyPanel.setPreferredSize(new Dimension(100,100));
@@ -395,35 +415,35 @@ public class MyWindow extends JFrame {
         JLabel energyIcon = new JLabel(iconEnergy, JLabel.CENTER);
         energy = new JLabel("", JLabel.CENTER);
         energy.setFont(new Font("Calibri", Font.BOLD, 32));
-        energy.setText(String.valueOf(p.energy));
+        energy.setText(String.valueOf(p.getEnergy()));
         energyPanel.add(energyIcon);
         energyPanel.add(energy);
 
         JLabel energyWinIcon = new JLabel(iconEnergyWin, JLabel.CENTER);
         energyWin = new JLabel("", JLabel.CENTER);
         energyWin.setFont(new Font("Calibri", Font.BOLD, 32));
-        energyWin.setText(String.valueOf(p.energyWin));
+        energyWin.setText(String.valueOf(p.getEnergyWin()));
         energyPanel.add(energyWinIcon);
         energyPanel.add(energyWin);
 
         JLabel energyLoseIcon = new JLabel(iconEnergyLose, JLabel.CENTER);
         energyLose = new JLabel("", JLabel.CENTER);
         energyLose.setFont(new Font("Calibri", Font.BOLD, 32));
-        energyLose.setText(String.valueOf(p.energyLose));
+        energyLose.setText(String.valueOf(p.getEnergyLose()));
         energyPanel.add(energyLoseIcon);
         energyPanel.add(energyLose);
         
         JLabel distanceIcon = new JLabel(iconDistance, JLabel.CENTER);
         distance = new JLabel("", JLabel.CENTER);
         distance.setFont(new Font("Calibri", Font.BOLD, 32));
-        distance.setText(String.valueOf(p.distanceParcourure));
+        distance.setText(String.valueOf(p.getDistanceParcourure()));
         energyPanel.add(distanceIcon);
         energyPanel.add(distance);
 
         JLabel rollbackIcon = new JLabel(iconRollback, JLabel.CENTER);
         rollback = new JLabel("", JLabel.CENTER);
         rollback.setFont(new Font("Calibri", Font.BOLD, 32));
-        rollback.setText(String.valueOf(p.undo));
+        rollback.setText(String.valueOf(p.getUndo()));
         energyPanel.add(rollbackIcon);
         energyPanel.add(rollback);
 
@@ -432,11 +452,11 @@ public class MyWindow extends JFrame {
 
     
     private void refreshBoard(int x, int y){
-        int[] playerPosition = this.p.board.getPlayer();
-        if(p.energy <= 0){
+        int[] playerPosition = this.p.getBoard().getPlayer();
+        if(p.getEnergy() <= 0){
             this.gameOver("You lose !");
         }
-        else if(this.p.board.gameOver()){
+        else if(this.p.getBoard().gameOver()){
             // labelCase[p.board.DIM_X-2][p.board.DIM_Y-1].setIcon(null);
             // labelCase[p.board.DIM_X-1][p.board.DIM_Y-2].setIcon(null);
             
@@ -447,17 +467,17 @@ public class MyWindow extends JFrame {
             
         }
         else{
-            if(!this.p.board.isRock(x, y) || !this.p.board.isTree(x, y)){
+            if(!this.p.getBoard().isRock(x, y) || !this.p.getBoard().isTree(x, y)){
                 labelCase[x][y].setIcon(null);
             }
             labelCase[playerPosition[0]][playerPosition[1]].setIcon(iconPlayer);
             
             
-            energy.setText(String.valueOf(p.energy));
-            distance.setText(String.valueOf(p.distanceParcourure));
-            energyLose.setText(String.valueOf(p.energyLose));
-            energyWin.setText(String.valueOf(p.energyWin));
-            rollback.setText(String.valueOf(p.undo));
+            energy.setText(String.valueOf(p.getEnergy()));
+            distance.setText(String.valueOf(p.getDistanceParcourure()));
+            energyLose.setText(String.valueOf(p.getEnergyLose()));
+            energyWin.setText(String.valueOf(p.getEnergyWin()));
+            rollback.setText(String.valueOf(p.getUndo()));
             
         }
         
@@ -510,7 +530,7 @@ public class MyWindow extends JFrame {
             }
         }
         else if(n == 1){
-            restartGame(new Player(new Board()));
+            restartGame();
         }
         else if(n == 2){
             showGameHistory();
@@ -529,7 +549,7 @@ public class MyWindow extends JFrame {
         Object[] options = {"Restart", "Show the best way" , "See games history", "Leave"};
         int n = JOptionPane.showOptionDialog(this, showResultDialog(), title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, null);
         if(n == 0){
-            restartGame(new Player(new Board()));
+            restartGame();
         }
         else if(n == 1){
               
@@ -548,28 +568,28 @@ public class MyWindow extends JFrame {
 
         JLabel energyIcon = new JLabel("Energy left : ", JLabel.CENTER);
         energy = new JLabel("", JLabel.CENTER);
-        energy.setText(String.valueOf(p.energy));
+        energy.setText(String.valueOf(p.getEnergy()));
         energy.setFont(new Font("Calibri", Font.BOLD, 20));
         resultPanel.add(energyIcon);
         resultPanel.add(energy);
 
         JLabel energyWinIcon = new JLabel("\n\nEnergy win : ", JLabel.CENTER);
         energyWin = new JLabel("", JLabel.CENTER);
-        energyWin.setText(String.valueOf(p.energyWin));
+        energyWin.setText(String.valueOf(p.getEnergyWin()));
         energyWin.setFont(new Font("Calibri", Font.BOLD, 20));
         resultPanel.add(energyWinIcon);
         resultPanel.add(energyWin);
 
         JLabel energyLoseIcon = new JLabel("\n\nEnergy lose : ", JLabel.CENTER);
         energyLose = new JLabel("", JLabel.CENTER);
-        energyLose.setText(String.valueOf(p.energyLose));
+        energyLose.setText(String.valueOf(p.getEnergyLose()));
         energyLose.setFont(new Font("Calibri", Font.BOLD, 20));
         resultPanel.add(energyLoseIcon);
         resultPanel.add(energyLose);
 
         JLabel distanceIcon = new JLabel("\n\nBoxes traveled : ", JLabel.CENTER);
         distance = new JLabel("", JLabel.CENTER);
-        distance.setText(String.valueOf(p.distanceParcourure));
+        distance.setText(String.valueOf(p.getDistanceParcourure()));
         distance.setFont(new Font("Calibri", Font.BOLD, 20));
         resultPanel.add(distanceIcon);
         resultPanel.add(distance);
@@ -586,29 +606,33 @@ public class MyWindow extends JFrame {
     public void recoverGame(Player player, int i) throws Exception{
         this.p = player;
         Data data = (Data) Ressources.Load("data.save");
-        System.out.println("\n############# PREVIOUS GAME LOADED #############");
         if(i == 0){
             displayMessageDialog("\n Game from the : " + data.date );
         }
 
-        player.energy = data.energy;
-        player.energyLose = data.energyLose;
-        player.energyWin = data.energyWin;
-        player.distanceParcourure = data.distance;
-        player.undo = data.undo;
-        player.board.setPlayer(data.posPlayerX, data.posPlayerY);
+        player.setEnergy(data.energy);
+        player.setEnergyLose(data.energyLose);
+        player.setEnergyWin(data.energyWin);
+        player.setDistanceParcourure(data.distance);
+        player.setUndo(data.undo);
+        player.getBoard().setPlayer(data.posPlayerX, data.posPlayerY);
         for (int[] obstacle : data.trees) {
-            player.board.setTree(obstacle);
+            player.getBoard().setTree(obstacle);
         }
         for (int[] obstacle : data.rocks) {
-            player.board.setRock(obstacle);
+            player.getBoard().setRock(obstacle);
         }
         for (int[] obstacle : data.fruits) {
-            player.board.setFruit(obstacle);
+            player.getBoard().setFruit(obstacle);
         }
         for (int[] obstacle : data.meats) {
-            player.board.setMeat(obstacle);
+            player.getBoard().setMeat(obstacle);
         }
+
+        player.getBoard().getAllFruits();
+        player.getBoard().getAllMeats();
+        player.getBoard().getAllTrees();
+        player.getBoard().getAllRocks();
 
         contentPane.add(this.displayBoard());
         contentPane.add(this.buttonMove(), BorderLayout.SOUTH);
@@ -666,18 +690,18 @@ public class MyWindow extends JFrame {
             Data data = (Data) Ressources.Load("./games/game"+gameID+".save");
             // p.board.resetAll();
             
-            player.board.setPlayer(data.posPlayerX, data.posPlayerY);
+            player.getBoard().setPlayer(data.posPlayerX, data.posPlayerY);
             for (int[] obstacle : data.trees) {
-                player.board.setTree(obstacle);
+                player.getBoard().setTree(obstacle);
             }
             for (int[] obstacle : data.rocks) {
-                player.board.setRock(obstacle);
+                player.getBoard().setRock(obstacle);
             }
             for (int[] obstacle : data.fruits) {
-                player.board.setFruit(obstacle);
+                player.getBoard().setFruit(obstacle);
             }
             for (int[] obstacle : data.meats) {
-                player.board.setMeat(obstacle);
+                player.getBoard().setMeat(obstacle);
             }
             System.out.println("size data deplacement " + data.playerDeplacements.size());
 
@@ -693,9 +717,9 @@ public class MyWindow extends JFrame {
                     
                     try {
                         boucleIsFinish = false;
-                        if(!player.board.isTree(data.playerDeplacements.get(iTimerReplay)[0], data.playerDeplacements.get(iTimerReplay)[1])
-                         && !player.board.isRock(data.playerDeplacements.get(iTimerReplay)[0], data.playerDeplacements.get(iTimerReplay)[1])
-                         && !player.board.isHouse(data.playerDeplacements.get(iTimerReplay)[0], data.playerDeplacements.get(iTimerReplay)[1])){
+                        if(!player.getBoard().isTree(data.playerDeplacements.get(iTimerReplay)[0], data.playerDeplacements.get(iTimerReplay)[1])
+                         && !player.getBoard().isRock(data.playerDeplacements.get(iTimerReplay)[0], data.playerDeplacements.get(iTimerReplay)[1])
+                         && !player.getBoard().isHouse(data.playerDeplacements.get(iTimerReplay)[0], data.playerDeplacements.get(iTimerReplay)[1])){
                             labelCase[data.playerDeplacements.get(iTimerReplay)[0]][data.playerDeplacements.get(iTimerReplay)[1]].setIcon(iconPlayer);
                             labelCase[data.playerDeplacements.get(iTimerReplay)[0]][data.playerDeplacements.get(iTimerReplay)[1]].setOpaque(true);
                             labelCase[data.playerDeplacements.get(iTimerReplay)[0]][data.playerDeplacements.get(iTimerReplay)[1]].setBackground(new Color(202,202,202));
@@ -732,7 +756,7 @@ public class MyWindow extends JFrame {
         endOfReplay.setFont(new Font("Calibri", Font.BOLD, 20));
         int n = JOptionPane.showOptionDialog(this, endOfReplay , "", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, null);
         if(n == 0){
-            restartGame(new Player(new Board()));
+            restartGame();
         }
         else if(n == 1){
             showGameHistory();
@@ -764,10 +788,6 @@ public class MyWindow extends JFrame {
     }
 
     private String displayHistoryDialog(JPanel allGameData){
-        // Object[] possibilities = {};
-        // for(int i=0; i<iFile-1; i++){
-        //     possibilities[i] = i+1;
-        // }
         String n = (String) JOptionPane.showInputDialog(this, allGameData, "Replay a game", JOptionPane.QUESTION_MESSAGE, null, null, null);
         return n;
     }
@@ -799,28 +819,23 @@ public class MyWindow extends JFrame {
         panRemy.add(siteRemy, BorderLayout.SOUTH);
 
         // JOptionPane.showMessageDialog(this, paninf, "Les informaticiens", JOptionPane.INFORMATION_MESSAGE);
-        int n = JOptionPane.showOptionDialog(this, panInf, "Les informaticiens", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
+        JOptionPane.showOptionDialog(this, panInf, "Les informaticiens", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
 
     }
 
-    private void restartGame(Player player){
+    private void restartGame(){
 
-        this.p = player;
+        this.p = new Player(new Board());
         
-        labelCase = new JLabel [p.board.DIM_X][p.board.DIM_Y];
-
-        player.board.Init();
-
-        int x = player.board.getPlayer()[0];
-        int y = player.board.getPlayer()[1];
-
-        
+        // labelCase = new JLabel [Board.DIM_X][Board.DIM_Y];
+        // player.board.resetAll();
+        this.p.getBoard().Init();
         
         contentPane.add(this.displayBoard());
         contentPane.add(this.buttonMove(), BorderLayout.SOUTH);
         contentPane.add(this.energyPanel(), BorderLayout.EAST);
 
-        refreshBoard(x, y);
+        refreshBoard(0, 0);
 
     }
     public static void main(String[] args) throws Exception {
@@ -835,11 +850,40 @@ public class MyWindow extends JFrame {
         MyWindow myWindow = new MyWindow(player);
         // myWindow.displayBoard();
         myWindow.setVisible( true );
-        // int x = board.getPlayer()[0];
-        // int y = board.getPlayer()[1];
-        // Thread.sleep(3000);
-        // player.moveDown(x, y);
-        // myWindow.refreshBoard(x, y);
+
+        myWindow.contentPane.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {}
+    
+            @Override
+            public void keyReleased(KeyEvent e) {}
+    
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP ||e.getKeyCode() == KeyEvent.VK_Z){
+			        myWindow.upListener();
+                }
+		        if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S){
+			        myWindow.downListener();
+		        }
+		        if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D){
+                    myWindow.rightListener();
+		        }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_Q){
+                    myWindow.leftListener();
+		        }
+                if (e.getKeyCode() == KeyEvent.VK_B){
+                    myWindow.undoListener();
+		        }
+                if (e.getKeyCode() == KeyEvent.VK_L){
+                    myWindow.saveListener();
+		        }       
+            }
+        });
+    
+        myWindow.contentPane.setFocusable(true);
+        myWindow.contentPane.requestFocusInWindow();
         
     }
 

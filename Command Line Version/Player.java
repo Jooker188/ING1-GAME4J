@@ -6,17 +6,17 @@ import java.util.*;
 import java.io.File;
 
 public class Player{
-    public Board board;
-    public int energy;
-    public boolean isDead = false;
-    public int energyWin = 0;
-    public int energyLose = 0;
-    public int distanceParcourure = 0;
-    public long startTime;
-    public long endTime;
-    public ArrayList<int[]> pathUsed1;
-    public ArrayList<int[]> pathUsed2;
-    public int undo;
+    private Board board;
+    private int energy;
+    private boolean isDead = false;
+    private int energyWin = 0;
+    private int energyLose = 0;
+    private int distanceParcourure = 0;
+    private long startTime;
+    private long endTime;
+    private ArrayList<int[]> pathUsed1;
+    private ArrayList<int[]> pathUsed2;
+    private int undo;
 
     public Player(Board b){
         this.board = b;
@@ -30,9 +30,51 @@ public class Player{
         this.energy = (int) ((Math.random() * (15 - 10)) + 10);  // int) ((Math.random() * (max - min)) + min);
     }
 
-  
-
+    public Board getBoard() {
+        return board;
+    }
     
+    public int getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
+    }
+    
+
+    public int getEnergyWin() {
+        return energyWin;
+    }
+
+    public void setEnergyWin(int energyWin) {
+        this.energyWin = energyWin;
+    }
+
+    public int getEnergyLose() {
+        return energyLose;
+    }
+
+    public void setEnergyLose(int energyLose) {
+        this.energyLose = energyLose;
+    }
+
+    public int getDistanceParcourure() {
+        return distanceParcourure;
+    }
+
+    public void setDistanceParcourure(int distanceParcourure) {
+        this.distanceParcourure = distanceParcourure;
+    }
+
+    public int getUndo() {
+        return undo;
+    }
+
+    public void setUndo(int undo) {
+        this.undo = undo;
+    }
+
     public String action(){
         System.out.println("You can move forwards (Z,Q,S,D), backwards (B) or save the game and quit (L)");
         Scanner keyboard = new Scanner(System.in);
@@ -254,10 +296,10 @@ public class Player{
         }
         Data data = new Data();
         data.playerDeplacements = this.pathUsed2;
-        data.meats = this.board.allMeats;
-        data.fruits = this.board.allFruits;
-        data.rocks = this.board.allRocks;
-        data.trees = this.board.allTrees;
+        data.meats = this.board.getAllMeats();
+        data.fruits = this.board.getAllFruits();
+        data.rocks = this.board.getAllRocks();
+        data.trees = this.board.getAllTrees();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         data.date = dtf.format(LocalDateTime.now());
         File file = new File("./games/");

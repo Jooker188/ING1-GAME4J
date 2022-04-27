@@ -4,18 +4,18 @@ public class Board{
     public static int DIM_X;
     public static int DIM_Y;
     private char[][] board;
-    private Player p;
-    public ArrayList<int[]> allMeats;
-    public ArrayList<int[]> allFruits;
-    public ArrayList<int[]> allRocks;
-    public ArrayList<int[]> allTrees;
+    // private Player p;
+    private ArrayList<int[]> allMeats;
+    private ArrayList<int[]> allFruits;
+    private ArrayList<int[]> allRocks;
+    private ArrayList<int[]> allTrees;
 
 
     public Board(){
         DIM_X = 13;
         DIM_Y = 13;
         this.board = new char[DIM_X][DIM_Y];
-        this.p = new Player(this);
+        // this.p = new Player(this);
     }
 
     public void setBoard(){
@@ -251,7 +251,7 @@ public class Board{
         return obstacles;
     }
     public int setPlayer(int x, int y){
-        
+        System.out.println("value = " + this.board[x][y]);
         if(this.board[x][y] == ' '){
             for(int i=0; i<DIM_X; i++){
                 for(int j=0; j<DIM_Y; j++){

@@ -1,0 +1,3 @@
+move trop rapide lors boucle -> boucle infini
+chargement de game sauvegardé -> +10 a chaque deplacement 
+restart a game bug dans le menu
