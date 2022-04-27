@@ -58,13 +58,13 @@ public class Main {
                 board.setPlayer(deplacement[0], deplacement[1]);
                 board.Display();
                 switch(speed){
-                    case 1:
+                    case 0:
                         Thread.sleep(1500);
                         break;
-                    case 2:
+                    case 1:
                         Thread.sleep(1000);
                         break;
-                    case 3:
+                    case 2:
                         Thread.sleep(500);
                         break;
                 }

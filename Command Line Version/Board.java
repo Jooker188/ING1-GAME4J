@@ -31,9 +31,9 @@ public class Board{
                 if( i == 0 && j == 0){ //Positionnement du Joueur en debut de partie
                     this.board[i][j] = 'P';
                 }
-                // else if( i == DIM_X-2 && j == DIM_Y-3){ //Positionnement de la maison a atteindre
-                //     this.board[i][j] = 'M';
-                // }
+                else if( i == DIM_X-1 && j == DIM_Y-1){ //Positionnement de la maison a atteindre
+                    this.board[i][j] = 'M';
+                }
                 else{
                     this.board[i][j] = ' ';  // Mise en place case vide
                 }
@@ -183,6 +183,14 @@ public class Board{
             return false;
         }
     }
+    public boolean isHouse(int x, int y){
+        if(this.board[x][y] == 'M'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public ArrayList<int[]> getAllTrees(){
         ArrayList<int[]> obstacles = new ArrayList<int[]>();
 
@@ -259,6 +267,17 @@ public class Board{
             System.out.println("You have hit an obstacle, you return to the previous position and lose 10 life points");
             return 1; //la case est un obstacle
         }
+        else if(this.board[x][y] == 'M'){
+            for(int i=0; i<DIM_X; i++){
+                for(int j=0; j<DIM_Y; j++){
+                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
+                        this.board[i][j] = ' ';
+                    }
+                }
+            }
+            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+            return 3; // la case est la maison
+        }
         else{
             for(int i=0; i<DIM_X; i++){
                 for(int j=0; j<DIM_Y; j++){
@@ -282,27 +301,14 @@ public class Board{
         return false;
     } 
 
-    // public boolean isRealisable(){
-    //     int range = this.p.energy;
-    //     while(range > 0){
-    //         for(int i = 0; i<range; i++){
-    //             int newX1 = getPlayer()[0] + i;
-    //             int newX2 = getPlayer()[0] - i;
-    //             int newY1 = getPlayer()[1] + i;
-    //             int newY2 = getPlayer()[1] - i;
-
-    //             if(this.board[newX1][getPlayer()[1]] != ('V' |'F') && 
-    //                this.board[newX2][getPlayer()[1]] != ('V' |'F') &&
-    //                this.board[getPlayer()[0]][newY1] != ('V' |'F') &&
-    //                this.board[getPlayer()[0]][newY2] != ('V' |'F')){
-    //                     System.out.println("false");
-    //                     return false; 
-    //             }
-    //         }
-    //     }
-    //     System.out.println("true");
-    //     return true;
-    // }
+    public void resetAll(){
+        for(int i=0; i<DIM_X; i++){
+            for(int j=0; j<DIM_Y; j++){
+                
+                    this.board[i][j] = ' ';  // Mise en place case vide
+            }
+        }
+    }
 
     public void Init(){
         setBoard();

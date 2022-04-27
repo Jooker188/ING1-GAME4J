@@ -11,6 +11,6 @@ public class Data implements java.io.Serializable{
     public ArrayList<int[]> rocks;
     public ArrayList<int[]> meats;
     public ArrayList<int[]> playerDeplacements;
-    public int energy;
+    public int energy, energyLose, energyWin, distance, undo;
     public String date;
 }

@@ -45,21 +45,38 @@ public class Player{
         switch(action){ //deplacement avec ZQSD pour le moment
             case "z":
                 moveUp(x,y);
-                
-                
                 break;
+
             case "q":
                 moveLeft(x,y);
-                
                 break;
+
             case "s":
                 moveDown(x,y);
                 break;
+
             case "d":
                 moveRight(x, y);
                 break;
+
             case "l":
-                Data data = new Data();
+                saveGame();
+                return "L";
+
+            case "b":
+                undoMovement();
+                break;
+
+            default:
+                break;
+        }
+        return "a";
+    }
+
+    
+
+    public int saveGame(){
+        Data data = new Data();
                 data.posPlayerX = this.board.getPlayer()[0];
                 data.posPlayerY = this.board.getPlayer()[1];
                 data.meats = this.board.getAllMeats();
@@ -67,27 +84,26 @@ public class Player{
                 data.rocks = this.board.getAllRocks();
                 data.trees = this.board.getAllTrees();
                 data.energy = this.energy;
+                data.energyLose = this.energyLose;
+                data.energyWin = this.energyWin;
+                data.distance = this.distanceParcourure;
+                data.undo = this.undo;
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                 data.date = dtf.format(LocalDateTime.now());
                 try{
                     Ressources.Save(data, "data.save");
+                    
                     System.out.println("\nGame Saved Successfully !");
+                    return 1;
                 }
                 catch(Exception e){
                     System.out.println("Couldn't save : " + e.getMessage());
+                    return 0;
                 }
-                return "L";
-
-            case "b":
-                undoMovement();
-                break;
-            default:
-                break;
-        }
-        return "a";
     }
 
-    public void undoMovement(){
+    public int undoMovement(){
+        int intUndo = 0;
         if(this.undo > 0){
             if(this.pathUsed1.size()>1){
                 this.pathUsed1.remove(this.pathUsed1.size()-1);
@@ -100,11 +116,14 @@ public class Player{
             }
             else{
                 System.out.println("This is the initial position");
+                intUndo = 2;
             }
         }
         else{
             System.out.println("You can't undo your deplacement anymore");
+            intUndo = 1;    
         }
+        return intUndo;
     }
 
     public int[] moveUp(int x, int y){
@@ -116,7 +135,7 @@ public class Player{
             currentBox[1] = y;
             if (resultat != 1){
                 // boucle(currentBox); 
-            }         
+            }        
         }
         else{
             System.out.println("\nThis is a Wall");
@@ -225,6 +244,14 @@ public class Player{
     }
 
     public void addToHistory(){
+        System.out.println("addtohisto");
+        System.out.println(this.pathUsed2.size());
+        for(int i=0; i< this.pathUsed2.size(); i++){
+            System.out.println(pathUsed2.get(i)[0]); 
+            System.out.println(pathUsed2.get(i)[1]); 
+
+
+        }
         Data data = new Data();
         data.playerDeplacements = this.pathUsed2;
         data.meats = this.board.allMeats;
@@ -243,24 +270,16 @@ public class Player{
         }   
     }
 
-    public void showResult(){
-        System.out.println("\n############# PLAYER ENERGY INFORMATIONS #############");
-        System.out.println("Energy left : " + this.energy);
-        System.out.println("Energy won  : " + energyWin);
-        System.out.println("Energy used : " + energyLose);
-        System.out.println("\n############# PLAYER DISTANCE INFORMATIONS #############");
-        System.out.println("You have traveled " + this.pathUsed2.size() + " boxes");
-        for (int[] boxe : this.pathUsed2) {
-            System.out.println("----> "+Arrays.toString(boxe));
-        }
-        System.out.println("\n############# GAME INFORMATIONS #############");
+    public String showResult(){
+        String timePlayed;
         this.endTime = System.currentTimeMillis();
         long second = (this.endTime-this.startTime)/1000;
         long minute = second / 60;
         if(second >= 60){
             second = second % 60;
         }
-        System.out.println("Time played : " + minute + "m "+ second +"s");
+        timePlayed = minute + "m "+ second +"s";
+        return timePlayed;
     }
  
 }
