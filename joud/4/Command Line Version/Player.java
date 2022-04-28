@@ -73,49 +73,7 @@ public class Player{
 
     public void setUndo(int undo) {
         this.undo = undo;
-    }
-
-    public String action(){
-        System.out.println("You can move forwards (Z,Q,S,D), backwards (B) or save the game and quit (L)");
-        Scanner keyboard = new Scanner(System.in);
-        String action = keyboard.nextLine();
-
-        int x = this.board.getPlayer()[0];
-        int y = this.board.getPlayer()[1];
-        
-
-        switch(action){ //deplacement avec ZQSD pour le moment
-            case "z":
-                moveUp(x,y);
-                break;
-
-            case "q":
-                moveLeft(x,y);
-                break;
-
-            case "s":
-                moveDown(x,y);
-                break;
-
-            case "d":
-                moveRight(x, y);
-                break;
-
-            case "l":
-                saveGame();
-                return "L";
-
-            case "b":
-                undoMovement();
-                break;
-
-            default:
-                break;
-        }
-        return "a";
-    }
-
-    
+    }    
 
     public int saveGame(){
         Data data = new Data();

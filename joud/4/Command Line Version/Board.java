@@ -10,8 +10,8 @@ public class Board{
     private ArrayList<int[]> allFruits;
     private ArrayList<int[]> allRocks;
     private ArrayList<int[]> allTrees;
-    public ArrayList<int[]> shortestPathDistance;
-    public ArrayList<int[]> shortestPathEnergy;
+    private ArrayList<int[]> shortestPathDistance;
+    private ArrayList<int[]> shortestPathEnergy;
     private float taux_obstacle = 0.2f;
     private float taux_bonus = 0.2f;
 
@@ -44,6 +44,23 @@ public class Board{
             }
         }
     }
+
+    public ArrayList<int[]> getShortestPathDistance() {
+        return shortestPathDistance;
+    }
+
+    public void setShortestPathDistance(ArrayList<int[]> shortestPathDistance) {
+        this.shortestPathDistance = shortestPathDistance;
+    }
+
+    public ArrayList<int[]> getShortestPathEnergy() {
+        return shortestPathEnergy;
+    }
+
+    public void setShortestPathEnergy(ArrayList<int[]> shortestPathEnergy) {
+        this.shortestPathEnergy = shortestPathEnergy;
+    }
+
 
     public boolean isBorder(int x, int y){
         if(this.board[x][y] == '#'){
@@ -255,7 +272,6 @@ public class Board{
         return obstacles;
     }
     public int setPlayer(int x, int y){
-        System.out.println("value = " + this.board[x][y]);
         if(this.board[x][y] == ' '){
             for(int i=0; i<DIM_X; i++){
                 for(int j=0; j<DIM_Y; j++){
@@ -622,6 +638,13 @@ public class Board{
 
         return cases;
     }
+    private boolean isRealisable(){
+        if(this.getShortestPathDistance().size() > 0){
+            return true;
+        }
+        else return false;
+    }
+
 
     public void Init()  throws IOException{
         setBoard();
@@ -631,7 +654,7 @@ public class Board{
         getAllMeats();
         getAllRocks();
         getAllTrees();
-
+       
         int[][] matriceDistance = generateMatriceAdjacencePondere(10);
         
         
@@ -649,6 +672,11 @@ public class Board{
         }
         catch(ArrayIndexOutOfBoundsException e){
             this.shortestPathEnergy = new ArrayList<int[]>();
+        }
+
+        while(!this.isRealisable()){
+            System.out.println("reset");;
+            this.Init();
         }
     }
 }

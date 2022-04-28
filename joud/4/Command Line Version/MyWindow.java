@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import java.awt.event.ActionEvent;
+
+import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 
@@ -19,12 +21,14 @@ public class MyWindow extends JFrame {
     private JLabel[][] labelCase;
     private JLabel energy, distance, energyWin, energyLose, rollback, timePlayed;
     public Player p;
-    private ImageIcon iconUp, iconDown, iconLeft, iconRight, iconHomePlayer, iconJoud, iconRemy, iconCase, iconRock, iconTree, iconFruit, iconMeat, iconHome, iconPlayer, iconEnergy, iconDistance, iconEnergyLose, iconEnergyWin, iconRollback;
+    private ImageIcon iconIconRules, iconRules, iconRedLegend, iconBlueLegend, iconBlackLegend, iconWays, iconUp, iconDown, iconLeft, iconRight, iconHomePlayer, iconJoud, iconRemy, iconCase, iconRock, iconTree, iconFruit, iconMeat, iconHome, iconPlayer, iconEnergy, iconDistance, iconEnergyLose, iconEnergyWin, iconRollback;
 
-    private Timer timer, timerReplay;
+    private Timer timer, timerReplay, timerEnergy;
 
     private int iTimer = 0;
     private int iTimerReplay = 0;
+    private int iTimerEnergy = 0;
+    private int iTimerDistance = 0;
 
     private boolean boucleIsFinish = true;
 
@@ -35,7 +39,9 @@ public class MyWindow extends JFrame {
         this.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         this.setSize( 800, 800 );
         this.setLocationRelativeTo( null );
+        this.setResizable(false);
         this.setJMenuBar(this.menuBar());
+
 
         this.p = p;
         labelCase = new JLabel [Board.DIM_X][Board.DIM_Y];
@@ -56,6 +62,30 @@ public class MyWindow extends JFrame {
         // ImageIcon iconCase = new ImageIcon(urlCase);
         // iconCase = new ImageIcon(new ImageIcon(urlCase).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
+
+        String urlRules = "src/rules.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconRules = new ImageIcon(new ImageIcon(urlRules).getImage().getScaledInstance(700, 700, Image.SCALE_DEFAULT));
+
+        String urlIconRules = "src/iconRules.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconIconRules = new ImageIcon(new ImageIcon(urlIconRules).getImage().getScaledInstance(700, 700, Image.SCALE_DEFAULT));
+
+        String urlRedLegend = "src/redLegend.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconRedLegend = new ImageIcon(new ImageIcon(urlRedLegend).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+
+        String urlBlueLegend = "src/blueLegend.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconBlueLegend = new ImageIcon(new ImageIcon(urlBlueLegend).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+
+        String urlBlackLegend = "src/blackLegend.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconBlackLegend = new ImageIcon(new ImageIcon(urlBlackLegend).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+
+        String urlWays = "src/ways.png";
+        // ImageIcon iconJoud = new ImageIcon(urlJoud);
+        iconWays = new ImageIcon(new ImageIcon(urlWays).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlUp = "src/top.png";
         // ImageIcon iconJoud = new ImageIcon(urlJoud);
@@ -87,23 +117,23 @@ public class MyWindow extends JFrame {
 
         String urlRock = "src/caseRock.png";
         // ImageIcon iconRock = new ImageIcon(urlRock);
-        iconRock = new ImageIcon(new ImageIcon(urlRock).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        iconRock = new ImageIcon(new ImageIcon(urlRock).getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT));
 
         String urlTree = "src/caseTree.png";
         // ImageIcon iconTree = new ImageIcon(urlTree);
-        iconTree = new ImageIcon(new ImageIcon(urlTree).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        iconTree = new ImageIcon(new ImageIcon(urlTree).getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT));
         
         String urlFruit = "src/caseFruit.png";
         iconFruit = new ImageIcon(new ImageIcon(urlFruit).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
         
         String urlMeat = "src/caseMeat.png";
-        iconMeat = new ImageIcon(new ImageIcon(urlMeat).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        iconMeat = new ImageIcon(new ImageIcon(urlMeat).getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT));
     
         String urlHome = "src/caseHome.png";
-        iconHome = new ImageIcon(new ImageIcon(urlHome).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        iconHome = new ImageIcon(new ImageIcon(urlHome).getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
         
         String urlPlayer = "src/casePlayer.png";
-        iconPlayer = new ImageIcon(new ImageIcon(urlPlayer).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        iconPlayer = new ImageIcon(new ImageIcon(urlPlayer).getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
         
         String urlEnergy = "src/energy.png";
         iconEnergy = new ImageIcon(new ImageIcon(urlEnergy).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
@@ -168,16 +198,23 @@ public class MyWindow extends JFrame {
     private JMenuBar menuBar(){
         JMenuBar menuBar = new JMenuBar();
 
+        JMenu mnuFile = new JMenu( "File" );
+
         JMenu mnuGame = new JMenu( "Game" );
 
-        mnuGame.add(mnuNewGame);
-        mnuGame.add(mnuSaveGame);
-        mnuGame.add(mnuLoadGame);
-        mnuGame.add(mnuHistoryGame);
-        mnuGame.add(mnuLeaveGame);
-        mnuGame.addSeparator();
-        mnuGame.add(mnuAboutUs);
 
+        mnuFile.add(mnuNewGame);
+        mnuFile.add(mnuSaveGame);
+        mnuFile.add(mnuLoadGame);
+        mnuFile.add(mnuHistoryGame);
+        mnuFile.add(mnuLeaveGame);
+        mnuFile.addSeparator();
+        mnuFile.add(mnuAboutUs);
+
+        mnuGame.add(mnuBestWay);
+        mnuGame.add(mnuRules);
+
+        menuBar.add(mnuFile);
         menuBar.add(mnuGame);
         
         return menuBar;
@@ -232,6 +269,21 @@ public class MyWindow extends JFrame {
             }
         }
     };
+
+    private AbstractAction mnuBestWay = new AbstractAction() {  
+        {
+            putValue( Action.NAME, "Show best ways" );
+            putValue( Action.SMALL_ICON, new ImageIcon( "src/ways.png" ) );
+            putValue( Action.SHORT_DESCRIPTION, "Show best ways to finish the game" );
+            putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_W, KeyEvent.CTRL_DOWN_MASK ) );
+
+        }
+        
+        @Override public void actionPerformed( ActionEvent e ) {
+            showBestWay();
+        }
+    };
+
     private AbstractAction mnuHistoryGame = new AbstractAction() {  
         {
             putValue( Action.NAME, "See games history" );
@@ -273,6 +325,51 @@ public class MyWindow extends JFrame {
         this.dispose();
     }
 
+    private AbstractAction mnuRules = new AbstractAction() {  
+        {
+            putValue( Action.NAME, "Rules" );
+            putValue( Action.SMALL_ICON, new ImageIcon( "src/iconRules.png" ) );
+            putValue( Action.SHORT_DESCRIPTION, "Rules to respect for the game");
+            putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK ) );
+
+        }
+        
+        @Override public void actionPerformed( ActionEvent e ) {
+            displayRules();
+        }
+    };
+
+    private JPanel waysLegend(){
+        JPanel waysLegend = new JPanel( new GridLayout(3, 2));
+        // JPanel waysLegend = new JPanel( new FlowLayout());
+
+        JLabel imageBlack = new JLabel(iconBlackLegend, JLabel.RIGHT);
+        imageBlack.setPreferredSize(new Dimension(10,10));
+        // imageBlack.setBackground(new Color(36,36,36));
+        JLabel textBlack = new JLabel("     Where the two path goes"); 
+        textBlack.setFont(new Font("Calibri", Font.BOLD, 15));
+        waysLegend.add(imageBlack);
+        waysLegend.add(textBlack);
+
+        JLabel imageRed = new JLabel(iconRedLegend, JLabel.RIGHT);        
+        // imageRed.setPreferredSize(new Dimension(10,10));
+        // imageRed.setBackground(new Color(181,9,9));
+        JLabel textRed = new JLabel("     Distance best way"); 
+        textRed.setFont(new Font("Calibri", Font.BOLD, 15));
+        waysLegend.add(imageRed);
+        waysLegend.add(textRed);
+
+        JLabel imageBlue = new JLabel(iconBlueLegend, JLabel.RIGHT);
+        // imageBlue.setPreferredSize(new Dimension(10,10));
+        // imageBlue.setBackground(new Color(9,9,181));
+        JLabel textBlue = new JLabel("     Energy best way"); 
+        textBlue.setFont(new Font("Calibri", Font.BOLD, 15));
+        waysLegend.add(imageBlue);
+        waysLegend.add(textBlue);
+
+        return waysLegend;
+            
+    }
 
     private JPanel buttonMove(){
 
@@ -337,7 +434,7 @@ public class MyWindow extends JFrame {
         right.addActionListener(e ->
         {
             rightListener();
-        });
+        });     
        
         return buttonMove;
     }
@@ -350,6 +447,8 @@ public class MyWindow extends JFrame {
             else{
                 displayMessageDialog("The game can not be saved");
             }
+            contentPane.setFocusable(true);
+        contentPane.requestFocusInWindow();
     }
 
     private void undoListener(){
@@ -364,6 +463,8 @@ public class MyWindow extends JFrame {
                 displayMessageDialog("This is the initial position, you can't undo your deplacement ");
             }
             refreshBoard(x, y);
+            contentPane.setFocusable(true);
+        contentPane.requestFocusInWindow();
     }
 
     private void upListener(){
@@ -373,8 +474,13 @@ public class MyWindow extends JFrame {
             int y = p.getBoard().getPlayer()[1];
             currentBox = p.moveUp(x, y);
             caseBoucle(p.boucle(currentBox));
+            if(p.getBoard().setPlayer(x-1, y) == 1){
+                displayMessageDialog("You hit an obstacle, you lose 10 life points !");
+            }
             refreshBoard(x, y);
         }
+        contentPane.setFocusable(true);
+        contentPane.requestFocusInWindow();
     }
 
     private void downListener(){
@@ -384,8 +490,13 @@ public class MyWindow extends JFrame {
             int y = p.getBoard().getPlayer()[1];
             currentBox = p.moveDown(x, y);
             caseBoucle(p.boucle(currentBox));
+            if(p.getBoard().setPlayer(x+1, y) == 1){
+                displayMessageDialog("You hit an obstacle, you lose 10 life points !");
+            }
             refreshBoard(x, y);
         }
+        contentPane.setFocusable(true);
+        contentPane.requestFocusInWindow();
     }
 
     private void rightListener(){
@@ -395,8 +506,13 @@ public class MyWindow extends JFrame {
             int y = p.getBoard().getPlayer()[1];
             currentBox = p.moveRight(x, y);
             caseBoucle(p.boucle(currentBox));
+            if(p.getBoard().setPlayer(x, y+1) == 1){
+                displayMessageDialog("You hit an obstacle, you lose 10 life points !");
+            }
             refreshBoard(x, y);
         }
+        contentPane.setFocusable(true);
+        contentPane.requestFocusInWindow();
     }
 
     private void leftListener(){
@@ -406,8 +522,13 @@ public class MyWindow extends JFrame {
             int y = p.getBoard().getPlayer()[1];
             currentBox = p.moveLeft(x, y);
             caseBoucle(p.boucle(currentBox));
+            if(p.getBoard().setPlayer(x, y-1) == 1){
+                displayMessageDialog("You hit an obstacle, you lose 10 life points !");
+            }
             refreshBoard(x, y);
         }
+        contentPane.setFocusable(true);
+        contentPane.requestFocusInWindow();
     }
     private JPanel energyPanel(){
         JPanel energyPanel = new JPanel(new GridLayout(5,2));
@@ -458,18 +579,18 @@ public class MyWindow extends JFrame {
             this.gameOver("You lose !");
         }
         else if(this.p.getBoard().gameOver()){
-            // labelCase[p.board.DIM_X-2][p.board.DIM_Y-1].setIcon(null);
-            // labelCase[p.board.DIM_X-1][p.board.DIM_Y-2].setIcon(null);
-            
-            // labelCase[playerPosition[0]][playerPosition[1]].setIcon(null);
-            // labelCase[p.board.DIM_X-1][p.board.DIM_Y-1].setIcon(iconHomePlayer);
             p.addToHistory();
             this.gameOver("You win !");
             
         }
         else{
+            System.out.println("else");
             if(!this.p.getBoard().isRock(x, y) || !this.p.getBoard().isTree(x, y)){
+                System.out.println("not");
                 labelCase[x][y].setIcon(null);
+            }
+            else if(this.p.getBoard().isRock(x, y) || this.p.getBoard().isTree(x, y)){
+                System.out.println("not");
             }
             labelCase[playerPosition[0]][playerPosition[1]].setIcon(iconPlayer);
             
@@ -520,6 +641,18 @@ public class MyWindow extends JFrame {
      
     }
 
+    private void displayRules(){
+        // Object[] options = {"Ok"};
+        JOptionPane op = new JOptionPane();
+        op.setOpaque(true);
+        op.setIcon(iconRules);
+        op.setBackground(new Color(17,16,17));
+        op.setPreferredSize(new Dimension(700  ,700));
+        op.createDialog(null, "Rules of GAME4J").setVisible(true);
+        // int n = JOptionPane.showOptionDialog(this, showResultDialog(), title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+
+    }
+
     private void saveDialog(String title){
         Object[] options = {"Continue", "Restart" , "See games history", "Leave"};
         int n = JOptionPane.showOptionDialog(this, showResultDialog(), title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, null);
@@ -553,7 +686,7 @@ public class MyWindow extends JFrame {
             restartGame();
         }
         else if(n == 1){
-              showBestWays();
+            showBestWay();
         }
         else if(n == 2){
             showGameHistory();
@@ -651,51 +784,56 @@ public class MyWindow extends JFrame {
         return true;
     }
 
-    private boolean isRealiasable(){
-        if(p.board.shortestPathDistance.size() > 0){
-            return true;
-        }
-        else return false;
-    }
+    
 
-    private void showBestWays(){
+    private void showBestWay(){
 
-        
-            for (int[] node : p.board.shortestPathDistance) {
-                int x = node[0];
-                int y = node[1];
-                Color red = new Color(255 ,0,0);
-                affichagePaths(x,y,red);
-            }
-           
-            for (int[] node : p.board.shortestPathEnergy) {
-                int x = node[0];
-                int y = node[1];
-                Color blue = new Color(0 ,0,255);
-                affichagePaths(x,y,blue);
-            }
-    }
-        
-    private void affichagePaths(int x, int y, Color c){
-        timer = new Timer(1000, new ActionListener() {
+        timerEnergy = new Timer(400, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
                 try {
-                    labelCase[x][y].setOpaque(true);
-                    labelCase[x][y].setBackground(c);
-                    iTimer++;
+                    System.out.println("try");
+                    System.out.println("itimer before : " + iTimerEnergy);
+
+                    boucleIsFinish = false;
+
+                    if(p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[0] == p.getBoard().getShortestPathDistance().get(iTimerDistance)[0]
+                     && p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[1] == p.getBoard().getShortestPathDistance().get(iTimerDistance)[1]){
+                        labelCase[p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[0]][p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[1]].setOpaque(true);
+                        labelCase[p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[0]][p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[1]].setBackground(new Color(36,36,36));    
+                     }
+                    else{
+                        labelCase[p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[0]][p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[1]].setOpaque(true);
+                        labelCase[p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[0]][p.getBoard().getShortestPathEnergy().get(iTimerEnergy)[1]].setBackground(new Color(9,9,181));
+                    
+                        labelCase[p.getBoard().getShortestPathDistance().get(iTimerDistance)[0]][p.getBoard().getShortestPathDistance().get(iTimerDistance)[1]].setOpaque(true);
+                        labelCase[p.getBoard().getShortestPathDistance().get(iTimerDistance)[0]][p.getBoard().getShortestPathDistance().get(iTimerDistance)[1]].setBackground(new Color(181,9,9));
+                    }
+                    iTimerEnergy++;
+                    iTimerDistance++;
+                    System.out.println("itimer after : " + iTimerEnergy);
+
                 } 
                 catch (Exception m) {
-                    iTimer = 0;
-                    timer.stop();
+                    System.out.println("stop");
+                    System.out.println("itimer disatnce = " + iTimerDistance);
+                    System.out.println("itimer energy = " + iTimerEnergy);
+
+                    boucleIsFinish = true;
+                    iTimerEnergy = 0;
+                    iTimerDistance = 0;
+                    timerEnergy.stop();
+                    endReplay();
                 }
-                
             }
         });
-        timer.start();
-
+        if(p.getBoard().getShortestPathDistance().size()>1){
+            System.out.println("start");
+            timerEnergy.start();
+        }           
     }
+
 
     private void showGameHistory(){
         
@@ -896,6 +1034,7 @@ public class MyWindow extends JFrame {
 
         Board board = new Board();
         board.Init();
+
         Player player = new Player(board);
 
         // Start my window
