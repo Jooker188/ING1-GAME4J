@@ -1,0 +1,5 @@
+1- utiliser isRealisable() pour tester si map est faisaible, on regenere une map tant que isRealisable renvoit false ou ce que tu veux genre afficher tout en rouge ou un message d'erreur ect
+
+2- afficher petit a petit les meilleurs chemins dans la couleur que tu veux (j'y suis pas arrivé mdr avec les timers la)(rouge = en terme de distance, bleu = en terme d'energie)
+
+3-mettre un bouton afficher les meilleurs chemins dans le menu, c'est plus stylé que juste afficher a la fin vu que y'a plus bcp d'items
