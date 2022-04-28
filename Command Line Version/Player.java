@@ -6,7 +6,7 @@ import java.util.*;
 import java.io.File;
 
 public class Player{
-    private Board board;
+    Board board;
     private int energy;
     private boolean isDead = false;
     private int energyWin = 0;

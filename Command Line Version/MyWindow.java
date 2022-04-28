@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -17,7 +18,7 @@ public class MyWindow extends JFrame {
     // private Icon caseIcon;
     private JLabel[][] labelCase;
     private JLabel energy, distance, energyWin, energyLose, rollback, timePlayed;
-    private Player p;
+    public Player p;
     private ImageIcon iconUp, iconDown, iconLeft, iconRight, iconHomePlayer, iconJoud, iconRemy, iconCase, iconRock, iconTree, iconFruit, iconMeat, iconHome, iconPlayer, iconEnergy, iconDistance, iconEnergyLose, iconEnergyWin, iconRollback;
 
     private Timer timer, timerReplay;
@@ -160,7 +161,7 @@ public class MyWindow extends JFrame {
                 gameBoard.add(labelCase[i][j]);
                   
             }
-        } 
+        }
         return gameBoard;
     }
 
@@ -552,7 +553,7 @@ public class MyWindow extends JFrame {
             restartGame();
         }
         else if(n == 1){
-              
+              showBestWays();
         }
         else if(n == 2){
             showGameHistory();
@@ -648,6 +649,52 @@ public class MyWindow extends JFrame {
                 return false;
         }
         return true;
+    }
+
+    private boolean isRealiasable(){
+        if(p.board.shortestPathDistance.size() > 0){
+            return true;
+        }
+        else return false;
+    }
+
+    private void showBestWays(){
+
+        
+            for (int[] node : p.board.shortestPathDistance) {
+                int x = node[0];
+                int y = node[1];
+                Color red = new Color(255 ,0,0);
+                affichagePaths(x,y,red);
+            }
+           
+            for (int[] node : p.board.shortestPathEnergy) {
+                int x = node[0];
+                int y = node[1];
+                Color blue = new Color(0 ,0,255);
+                affichagePaths(x,y,blue);
+            }
+    }
+        
+    private void affichagePaths(int x, int y, Color c){
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                try {
+                    labelCase[x][y].setOpaque(true);
+                    labelCase[x][y].setBackground(c);
+                    iTimer++;
+                } 
+                catch (Exception m) {
+                    iTimer = 0;
+                    timer.stop();
+                }
+                
+            }
+        });
+        timer.start();
+
     }
 
     private void showGameHistory(){
@@ -829,7 +876,12 @@ public class MyWindow extends JFrame {
         
         // labelCase = new JLabel [Board.DIM_X][Board.DIM_Y];
         // player.board.resetAll();
-        this.p.getBoard().Init();
+        try {
+            this.p.getBoard().Init();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         
         contentPane.add(this.displayBoard());
         contentPane.add(this.buttonMove(), BorderLayout.SOUTH);
