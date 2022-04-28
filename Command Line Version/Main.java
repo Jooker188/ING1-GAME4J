@@ -1,5 +1,7 @@
 import java.util.Scanner;
 import java.io.File;
+import java.nio.file.*;
+import java.io.*;
 
 public class Main {
     public static int Menu(){
@@ -74,7 +76,7 @@ public class Main {
         }
     }
 
-    public static void main(String args[]){
+    public static void main(String args[]) throws IOException{
 
         int start = Menu();
         switch(start){
@@ -83,7 +85,6 @@ public class Main {
                 Board board = new Board();
                 board.Init();
                 Player p = new Player(board);
-                board.isRealisable();
                 while(p.energy > 0 && !p.isDead){
                     board.Display();    
                     System.out.println("\nEnergy left : " + p.energy);

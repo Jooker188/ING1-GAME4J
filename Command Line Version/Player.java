@@ -40,62 +40,23 @@ public class Player{
 
         int x = this.board.getPlayer()[0];
         int y = this.board.getPlayer()[1];
-        int resultat = 0;
         
 
         switch(action){ //deplacement avec ZQSD pour le moment
             case "z":
-                if(!this.board.isBorder(x-1,y)){
-                    resultat=this.board.setPlayer(x-1,y);
-                    int[] currentBox = {x-1,y};
-                    boucle();
-                    this.pathUsed1.add(currentBox);
-                    this.pathUsed2.add(currentBox);
-                   
+                moveUp(x,y);
                 
-                }
-                else{
-                    System.out.println("\nThis is a Wall");
-                }
+                
                 break;
             case "q":
-                if(!this.board.isBorder(x,y-1)){
-                    int[] currentBox = {x,y-1};
-                    resultat=this.board.setPlayer(x,y-1);
-                    boucle();
-                    this.pathUsed1.add(currentBox);
-                    this.pathUsed2.add(currentBox);
-                    
-                }
-                else{
-                    System.out.println("\nThis is a Wall");
-                }
+                moveLeft(x,y);
+                
                 break;
             case "s":
-                if(!this.board.isBorder(x+1,y)){
-                    int[] currentBox = {x+1,y};
-                    resultat=this.board.setPlayer(x+1,y);
-                    boucle();
-                    this.pathUsed1.add(currentBox);
-                    this.pathUsed2.add(currentBox);
-                    
-                }
-                else{
-                    System.out.println("\nThis is a Wall");
-                }
+                moveDown(x,y);
                 break;
             case "d":
-                if(!this.board.isBorder(x,y+1)){
-                    int[] currentBox = {x,y+1};
-                    resultat=this.board.setPlayer(x,y+1);
-                    boucle();
-                    this.pathUsed1.add(currentBox);
-                    this.pathUsed2.add(currentBox);
-                    
-                }
-                else{
-                    System.out.println("\nThis is a Wall");
-                }
+                moveRight(x, y);
                 break;
             case "l":
                 Data data = new Data();
@@ -139,11 +100,68 @@ public class Player{
             default:
                 break;
         }
+        return "a";
+    }
 
+    
 
+    public void moveUp(int x, int y){
+        int resultat = 0;
+        if(!this.board.isBorder(x-1,y)){
+            resultat=this.board.setPlayer(x-1,y);
+            int[] currentBox = {x-1,y};
+            boucle(currentBox);          
+        }
+        else{
+            System.out.println("\nThis is a Wall");
+        }
+        refreshData(resultat);
+    }
+
+    public void moveLeft(int x, int y){
+        int resultat = 0;
+        if(!this.board.isBorder(x,y-1)){
+            int[] currentBox = {x,y-1};
+            resultat=this.board.setPlayer(x,y-1);
+            boucle(currentBox);
+    
+        }
+        else{
+            System.out.println("\nThis is a Wall");
+        }
+        refreshData(resultat);
+    }
+
+    public void moveDown(int x, int y){
+        int resultat = 0;
+        if(!this.board.isBorder(x+1,y)){
+            int[] currentBox = {x+1,y};
+            resultat=this.board.setPlayer(x+1,y);
+            boucle(currentBox);
+        }
+        else{
+            System.out.println("\nThis is a Wall");
+        }
+        refreshData(resultat);
+    }
+
+    public void moveRight(int x, int y){
+        int resultat = 0;
+        if(!this.board.isBorder(x,y+1)){
+            int[] currentBox = {x,y+1};
+            resultat=this.board.setPlayer(x,y+1);
+            boucle(currentBox);
+        }
+        else{
+            System.out.println("\nThis is a Wall");
+        }
+        refreshData(resultat);
+    }
+
+    public void refreshData(int resultat){
         this.energy--;
         if(resultat == 1){
-            this.energy -= 10;
+            this.energy -= 9;
             energyLose += 10;
         }
         else if(resultat == 2){
@@ -154,7 +172,12 @@ public class Player{
         else{
             distanceParcourure += 1;
         }
-        return "a";
+    }
+
+    public void boucle(int[] currentBox){
+        boucle();
+        this.pathUsed1.add(currentBox);
+        this.pathUsed2.add(currentBox);
     }
 
     public void boucle(){
