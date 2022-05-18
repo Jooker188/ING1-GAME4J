@@ -57,70 +57,49 @@ public class MyWindow extends JFrame {
     }	
 
     private void loadIcons(){
-        // String urlCase = "C:\\Users\\joudy\\Documents\\EISTI\\S2\\Java\\Projet\\ING1-GAME4J\\src\\caseVert.png";
-        // String urlCase = "src/caseVert.png";
-        // ImageIcon iconCase = new ImageIcon(urlCase);
-        // iconCase = new ImageIcon(new ImageIcon(urlCase).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-
-
         String urlRules = "src/rules.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconRules = new ImageIcon(new ImageIcon(urlRules).getImage().getScaledInstance(700, 700, Image.SCALE_DEFAULT));
 
         String urlIconRules = "src/iconRules.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconIconRules = new ImageIcon(new ImageIcon(urlIconRules).getImage().getScaledInstance(700, 700, Image.SCALE_DEFAULT));
 
         String urlRedLegend = "src/redLegend.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconRedLegend = new ImageIcon(new ImageIcon(urlRedLegend).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlBlueLegend = "src/blueLegend.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconBlueLegend = new ImageIcon(new ImageIcon(urlBlueLegend).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlBlackLegend = "src/blackLegend.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconBlackLegend = new ImageIcon(new ImageIcon(urlBlackLegend).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlWays = "src/ways.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconWays = new ImageIcon(new ImageIcon(urlWays).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlUp = "src/top.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconUp = new ImageIcon(new ImageIcon(urlUp).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlDown = "src/down.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconDown = new ImageIcon(new ImageIcon(urlDown).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
         
         String urlLeft = "src/left.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconLeft = new ImageIcon(new ImageIcon(urlLeft).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
         
         String urlRight = "src/right.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconRight = new ImageIcon(new ImageIcon(urlRight).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlHomePlayer = "src/caseHomePlayer.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconHomePlayer = new ImageIcon(new ImageIcon(urlHomePlayer).getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
 
         String urlJoud = "src/joud.png";
-        // ImageIcon iconJoud = new ImageIcon(urlJoud);
         iconJoud = new ImageIcon(new ImageIcon(urlJoud).getImage().getScaledInstance(300, 300, Image.SCALE_DEFAULT));
 
         String urlRemy = "src/remy.png";
-        // ImageIcon iconRemy = new ImageIcon(urlRemy);
         iconRemy = new ImageIcon(new ImageIcon(urlRemy).getImage().getScaledInstance(400, 300, Image.SCALE_DEFAULT));
 
         String urlRock = "src/caseRock.png";
-        // ImageIcon iconRock = new ImageIcon(urlRock);
         iconRock = new ImageIcon(new ImageIcon(urlRock).getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT));
 
         String urlTree = "src/caseTree.png";
-        // ImageIcon iconTree = new ImageIcon(urlTree);
         iconTree = new ImageIcon(new ImageIcon(urlTree).getImage().getScaledInstance(45, 45, Image.SCALE_DEFAULT));
         
         String urlFruit = "src/caseFruit.png";
@@ -156,12 +135,9 @@ public class MyWindow extends JFrame {
 
         //----------------GAME BOARD---------------------//
         // Build the "gameBoard".
-        // JPanel gameBoard = (JPanel) this.getContentPane();
 
         JPanel gameBoard = new JPanel();
         gameBoard.setLayout(new GridLayout(Board.DIM_X,Board.DIM_Y));
-
-        // int[] playerPosition = this.p.board.getPlayer();
 
         for(int i = 0; i<Board.DIM_X; i++){
             for(int j = 0; j<Board.DIM_Y; j++){
@@ -341,27 +317,23 @@ public class MyWindow extends JFrame {
 
     private JPanel waysLegend(){
         JPanel waysLegend = new JPanel( new GridLayout(3, 2));
-        // JPanel waysLegend = new JPanel( new FlowLayout());
 
         JLabel imageBlack = new JLabel(iconBlackLegend, JLabel.RIGHT);
         imageBlack.setPreferredSize(new Dimension(10,10));
-        // imageBlack.setBackground(new Color(36,36,36));
+
         JLabel textBlack = new JLabel("     Where the two path goes"); 
         textBlack.setFont(new Font("Calibri", Font.BOLD, 15));
         waysLegend.add(imageBlack);
         waysLegend.add(textBlack);
 
         JLabel imageRed = new JLabel(iconRedLegend, JLabel.RIGHT);        
-        // imageRed.setPreferredSize(new Dimension(10,10));
-        // imageRed.setBackground(new Color(181,9,9));
         JLabel textRed = new JLabel("     Distance best way"); 
+
         textRed.setFont(new Font("Calibri", Font.BOLD, 15));
         waysLegend.add(imageRed);
         waysLegend.add(textRed);
 
         JLabel imageBlue = new JLabel(iconBlueLegend, JLabel.RIGHT);
-        // imageBlue.setPreferredSize(new Dimension(10,10));
-        // imageBlue.setBackground(new Color(9,9,181));
         JLabel textBlue = new JLabel("     Energy best way"); 
         textBlue.setFont(new Font("Calibri", Font.BOLD, 15));
         waysLegend.add(imageBlue);
@@ -584,13 +556,10 @@ public class MyWindow extends JFrame {
             
         }
         else{
-            System.out.println("else");
             if(!this.p.getBoard().isRock(x, y) || !this.p.getBoard().isTree(x, y)){
-                System.out.println("not");
                 labelCase[x][y].setIcon(null);
             }
             else if(this.p.getBoard().isRock(x, y) || this.p.getBoard().isTree(x, y)){
-                System.out.println("not");
             }
             labelCase[playerPosition[0]][playerPosition[1]].setIcon(iconPlayer);
             
@@ -600,7 +569,7 @@ public class MyWindow extends JFrame {
             energyLose.setText(String.valueOf(p.getEnergyLose()));
             energyWin.setText(String.valueOf(p.getEnergyWin()));
             rollback.setText(String.valueOf(p.getUndo()));
-            
+            System.out.println("fdgf");
         }
         
     }
@@ -612,10 +581,6 @@ public class MyWindow extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     
                     try {
-                        // if(iTimer>1){
-                        //     labelCase[boucle.get(iTimer-2)[0]][boucle.get(iTimer-2)[1]].setOpaque(true);
-                        //     labelCase[boucle.get(iTimer-2)[0]][boucle.get(iTimer-2)[1]].setBackground(new Color(45 ,137,33));
-                        // }
                         boucleIsFinish = false;
                         labelCase[boucle.get(iTimer)[0]][boucle.get(iTimer)[1]].setOpaque(true);
                         labelCase[boucle.get(iTimer)[0]][boucle.get(iTimer)[1]].setBackground(new Color(41 ,242,15));
@@ -642,15 +607,12 @@ public class MyWindow extends JFrame {
     }
 
     private void displayRules(){
-        // Object[] options = {"Ok"};
         JOptionPane op = new JOptionPane();
         op.setOpaque(true);
         op.setIcon(iconRules);
         op.setBackground(new Color(17,16,17));
         op.setPreferredSize(new Dimension(700  ,700));
         op.createDialog(null, "Rules of GAME4J").setVisible(true);
-        // int n = JOptionPane.showOptionDialog(this, showResultDialog(), title, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-
     }
 
     private void saveDialog(String title){
@@ -873,7 +835,6 @@ public class MyWindow extends JFrame {
             this.p = player;
             
             Data data = (Data) Ressources.Load("./games/game"+gameID+".save");
-            // p.board.resetAll();
             
             player.getBoard().setPlayer(data.posPlayerX, data.posPlayerY);
             for (int[] obstacle : data.trees) {
@@ -893,7 +854,6 @@ public class MyWindow extends JFrame {
             contentPane.add(this.displayBoard());
             contentPane.add(this.buttonMove(), BorderLayout.SOUTH);
             contentPane.add(this.energyPanel(), BorderLayout.EAST);
-            // refreshBoard(data.playerDeplacements.get(0)[0], data.playerDeplacements.get(0)[1]);
             refreshBoard(data.posPlayerX, data.posPlayerY);
 
             timerReplay = new Timer(speed, new ActionListener() {
@@ -995,7 +955,7 @@ public class MyWindow extends JFrame {
         panJoud.add(siteJoud, BorderLayout.SOUTH);
 
         JLabel photoRemy = new JLabel(iconRemy, JLabel.CENTER);
-        JLabel nomRemy = new JLabel("Rémy Dionisio", JLabel.CENTER);
+        JLabel nomRemy = new JLabel("Remy Dionisio", JLabel.CENTER);
         nomRemy.setFont(new Font("Calibri", Font.BOLD, 32));
         JLabel siteRemy = new JLabel("https://remydionisio.fr", JLabel.CENTER);
         siteRemy.setFont(new Font("Calibri", Font.ITALIC, 25));
@@ -1003,7 +963,6 @@ public class MyWindow extends JFrame {
         panRemy.add(nomRemy, BorderLayout.CENTER);
         panRemy.add(siteRemy, BorderLayout.SOUTH);
 
-        // JOptionPane.showMessageDialog(this, paninf, "Les informaticiens", JOptionPane.INFORMATION_MESSAGE);
         JOptionPane.showOptionDialog(this, panInf, "Les informaticiens", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, null, null);
 
     }
@@ -1011,25 +970,21 @@ public class MyWindow extends JFrame {
     private void restartGame(){
 
         this.p = new Player(new Board());
-        
-        // labelCase = new JLabel [Board.DIM_X][Board.DIM_Y];
-        // player.board.resetAll();
+     
         try {
             this.p.getBoard().Init();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
         contentPane.add(this.displayBoard());
         contentPane.add(this.buttonMove(), BorderLayout.SOUTH);
         contentPane.add(this.energyPanel(), BorderLayout.EAST);
-
+        System.out.println("restart");
         refreshBoard(0, 0);
 
     }
     public static void main(String[] args) throws Exception {
-        // Apply a look'n feel
         UIManager.setLookAndFeel( new NimbusLookAndFeel() );
 
         Board board = new Board();
@@ -1037,9 +992,9 @@ public class MyWindow extends JFrame {
 
         Player player = new Player(board);
 
-        // Start my window
+
         MyWindow myWindow = new MyWindow(player);
-        // myWindow.displayBoard();
+
         myWindow.setVisible( true );
 
         myWindow.contentPane.addKeyListener(new KeyListener() {

@@ -272,43 +272,35 @@ public class Board{
         return obstacles;
     }
     public int setPlayer(int x, int y){
-        if(this.board[x][y] == ' '){
-            for(int i=0; i<DIM_X; i++){
-                for(int j=0; j<DIM_Y; j++){
-                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
-                        this.board[i][j] = ' ';
-                    }
-                }
-            }
-            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
-            return 0; //la case est vide
-        }
-        else if(this.board[x][y] == 'A' || this.board[x][y] == 'R'){
+
+        int nature;
+
+        if(this.board[x][y] == 'A' || this.board[x][y] == 'R'){
             System.out.println("You have hit an obstacle, you return to the previous position and lose 10 life points");
-            return 1; //la case est un obstacle
+            nature = 1; //la case est un obstacle
+            return nature;
         }
-        else if(this.board[x][y] == 'M'){
-            for(int i=0; i<DIM_X; i++){
-                for(int j=0; j<DIM_Y; j++){
-                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
-                        this.board[i][j] = ' ';
-                    }
-                }
-            }
-            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
-            return 3; // la case est la maison
+
+        if(this.board[x][y] == ' '){
+            nature = 0; //la case est vide
+        }
+        else if(this.board[x][y] == 'V' || this.board[x][y] == 'F'){
+            nature = 2; //la case est un bonus
         }
         else{
-            for(int i=0; i<DIM_X; i++){
-                for(int j=0; j<DIM_Y; j++){
-                    if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
-                        this.board[i][j] = ' ';
-                    }
+            nature = 3; // maison
+        }
+
+        for(int i=0; i<DIM_X; i++){
+            for(int j=0; j<DIM_Y; j++){
+                if(this.board[i][j] == 'P'){  //on efface l'ancienne position du joueur
+                    this.board[i][j] = ' ';
                 }
             }
-            this.board[x][y] = 'P'; //on place la nouvelle position du joueur
-            return 2; //la case est a manger
         }
+        this.board[x][y] = 'P'; //on place la nouvelle position du joueur
+        
+        return nature;
         
     }
 
@@ -420,13 +412,6 @@ public class Board{
             }
         }
 
-         //System.out.println();
-         //for(int i=0;i<sommets;i++){
-         //    for(int j=0; j<sommets; j++){
-         //        System.out.print(matrice[i][j] + "\t");
-         //    }
-         //    System.out.println();
-         //}
         return matrice;
 
     }
@@ -471,15 +456,6 @@ public class Board{
             }
         }
 
-        //verification par affichage
-        //System.out.println();
-        //for(int i=0;i<sommets;i++){
-        //    for(int j=0; j<sommets; j++){
-        //        System.out.print(matrice[i][j] + "\t");
-        //    }
-        //    System.out.println();
-        //}
-    
 
         int[][]distances = genererDistances(10);
         //on pondere la matrice avec les distances
@@ -638,7 +614,7 @@ public class Board{
 
         return cases;
     }
-    private boolean isRealisable(){
+    public boolean isRealisable(){
         if(this.getShortestPathDistance().size() > 0){
             return true;
         }
@@ -675,7 +651,7 @@ public class Board{
         }
 
         while(!this.isRealisable()){
-            System.out.println("reset");;
+            System.out.println("Impossible Map, re-generation...");;
             this.Init();
         }
     }

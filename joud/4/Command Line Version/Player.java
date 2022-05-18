@@ -147,6 +147,7 @@ public class Player{
     public int[] moveLeft(int x, int y){
         int resultat = 0;
         int[] currentBox = {0,0};
+
         if(!this.board.isBorder(x,y-1)){
             currentBox[0] = x;
             currentBox[1] = y-1;
@@ -202,6 +203,7 @@ public class Player{
 
     public void refreshData(int resultat){
         this.energy--;
+        System.out.println(resultat);
         if(resultat == 1){
             this.energy -= 9;
             energyLose += 10;
